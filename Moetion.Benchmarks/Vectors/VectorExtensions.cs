@@ -7,7 +7,7 @@ namespace Moetion.Benchmarks.Vectors
 {
     [DisassemblyDiagnoser(maxDepth: 1)] // change to 0 for just the [Benchmark] method
     [MemoryDiagnoser(displayGenColumns: false)]
-    public class VectorExtensionsTests
+    public class VectorExtensions
     {
         private Vector2 v21 = new Vector2(Random.Shared.Next(), Random.Shared.Next());
         private Vector2 v22 = new Vector2(Random.Shared.Next(), Random.Shared.Next());

@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Akihabara" Version="2021.1029.0" />
+    </ItemGroup>
+
 </Project>
