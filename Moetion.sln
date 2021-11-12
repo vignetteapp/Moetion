@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moetion", "Moetion\Moetion.csproj", "{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moetion.Tests", "Moetion.Tests\Moetion.Tests.csproj", "{A5D19A76-07E7-4CD7-9C0D-77A561040463}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moetion.Benchmarks", "Moetion.Benchmarks\Moetion.Benchmarks.csproj", "{64C4BDA1-0830-4717-B152-67C8F1E36C0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5D19A76-07E7-4CD7-9C0D-77A561040463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5D19A76-07E7-4CD7-9C0D-77A561040463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5D19A76-07E7-4CD7-9C0D-77A561040463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5D19A76-07E7-4CD7-9C0D-77A561040463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

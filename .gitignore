@@ -1,0 +1,11 @@
+.idea
+Moetion.sln.DotSettings.user
+
+Moetion/bin
+Moetion/obj
+
+Moetion.Tests/bin
+Moetion.Tests/obj
+
+Moetion.Benchmarks/bin
+Moetion.Benchmarks/obj
