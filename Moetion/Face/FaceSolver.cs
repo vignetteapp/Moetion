@@ -13,23 +13,23 @@ namespace Moetion.Face
             FaceData data = new FaceData();
             
             //eye keypoints
-            data.eyeInnerCornerL = list.Landmark[133].ToVector();
-            data.eyeInnerCornerR = list.Landmark[362].ToVector();
-            data.eyeOuterCornerL = list.Landmark[130].ToVector();
+            data.EyeInnerCornerL = list.Landmark[133].ToVector();
+            data.EyeInnerCornerR = list.Landmark[362].ToVector();
+            data.EyeOuterCornerL = list.Landmark[130].ToVector();
             
             //eye keypoint distances
-            data.eyeInnerDistance = data.eyeInnerCornerL.Distance(data.eyeInnerCornerR);
-            data.eyeOuterDistance = data.eyeOuterCornerL.Distance(data.eyeOuterCornerR);
+            data.EyeInnerDistance = data.EyeInnerCornerL.Distance(data.EyeInnerCornerR);
+            data.EyeOuterDistance = data.EyeOuterCornerL.Distance(data.EyeOuterCornerR);
             
             //mouth keypoints
-            data.upperInnerLip = list.Landmark[13].ToVector();
-            data.lowerInnerLip = list.Landmark[14].ToVector();
-            data.mouthCornerLeft = list.Landmark[61].ToVector();
-            data.mouthCornerRight = list.Landmark[291].ToVector();
+            data.UpperInnerLip = list.Landmark[13].ToVector();
+            data.LowerInnerLip = list.Landmark[14].ToVector();
+            data.MouthCornerLeft = list.Landmark[61].ToVector();
+            data.MouthCornerRight = list.Landmark[291].ToVector();
             
             //mouth keypoint distances
-            data.mouthOpen = data.upperInnerLip.Distance(data.lowerInnerLip);
-            data.mouthWidth = data.mouthCornerLeft.Distance(data.mouthCornerRight);
+            data.MouthOpen = data.UpperInnerLip.Distance(data.LowerInnerLip);
+            data.MouthWidth = data.MouthCornerLeft.Distance(data.MouthCornerRight);
             
             //mouth open and shape ratios
 

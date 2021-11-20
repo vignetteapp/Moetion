@@ -1,10 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moetion", "Moetion\Moetion.csproj", "{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moetion", "Moetion\Moetion.csproj", "{15FFCB98-7D67-4E11-9533-FEA2ADF594A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moetion.Tests", "Moetion.Tests\Moetion.Tests.csproj", "{A5D19A76-07E7-4CD7-9C0D-77A561040463}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moetion.Tests", "Moetion.Tests\Moetion.Tests.csproj", "{A5D19A76-07E7-4CD7-9C0D-77A561040463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moetion.Benchmarks", "Moetion.Benchmarks\Moetion.Benchmarks.csproj", "{64C4BDA1-0830-4717-B152-67C8F1E36C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moetion.Benchmarks", "Moetion.Benchmarks\Moetion.Benchmarks.csproj", "{64C4BDA1-0830-4717-B152-67C8F1E36C0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D2E4A3B-4BDC-45BC-A80D-AD4BDF8F6CB5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +32,11 @@ Global
 		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64C4BDA1-0830-4717-B152-67C8F1E36C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {244AFBA7-C407-4057-8F6B-1FE53446CD64}
 	EndGlobalSection
 EndGlobal
