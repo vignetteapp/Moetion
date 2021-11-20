@@ -8,10 +8,8 @@ namespace Moetion.Hands
 {
     public struct Hand
     {
-        // FIXME: kalidokit takes a Vector array with 3 Vectors, so I'm not sure if this is correct.
         public Vector3[] Palm;
-        // FIXME: Handrotation might be a vector array but I might be wrong.
-        public Vector3[] HandRotation;
+        public Quaternion HandRotation;
         public Vector3 Wrist;
 
         #region Thumb
