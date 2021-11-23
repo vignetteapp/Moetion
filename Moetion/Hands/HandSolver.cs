@@ -58,46 +58,46 @@ namespace Moetion.Hands
 
         private static void rigFingers(ref Hand hand, Handedness side)
         {
-            int invert = side == Handedness.Right ? 1 : -1;
+            int direction = side == Handedness.Right ? 1 : -1;
 
-            hand.Wrist.X = Math.Clamp(hand.Wrist.X * 2 * invert, -0.3f, 0.3f);
+            hand.Wrist.X = Math.Clamp(hand.Wrist.X * 2 * direction, -0.3f, 0.3f);
             hand.Wrist.Y = Math.Clamp(
                 hand.Wrist.Y * 2.3f,
                 side == Handedness.Right ? -1.2f : -0.6f,
                 side == Handedness.Right ? 0.6f : 1.6f);
-            hand.Wrist.Z = hand.Wrist.Z * -2.3f * invert;
+            hand.Wrist.Z = hand.Wrist.Z * -2.3f * direction;
 
-            rigThumbFinger(ref hand.ThumbProximal, side, HandSegment.Proximal, invert);
-            rigThumbFinger(ref hand.ThumbIntermediate, side, HandSegment.Intermediate, invert);
-            rigThumbFinger(ref hand.ThumbDistal, side, HandSegment.Distral, invert);
+            rigThumbFinger(ref hand.ThumbProximal, side, HandSegment.Proximal, direction);
+            rigThumbFinger(ref hand.ThumbIntermediate, side, HandSegment.Intermediate, direction);
+            rigThumbFinger(ref hand.ThumbDistal, side, HandSegment.Distral, direction);
 
-            rigOtherFinger(ref hand.IndexDistal, side, invert);
-            rigOtherFinger(ref hand.IndexIntermediate, side, invert);
-            rigOtherFinger(ref hand.IndexProximal, side, invert);
+            rigOtherFinger(ref hand.IndexDistal, side, direction);
+            rigOtherFinger(ref hand.IndexIntermediate, side, direction);
+            rigOtherFinger(ref hand.IndexProximal, side, direction);
 
-            rigOtherFinger(ref hand.MiddleDistal, side, invert);
-            rigOtherFinger(ref hand.MiddleIntermediate, side, invert);
-            rigOtherFinger(ref hand.MiddleProximal, side, invert);
+            rigOtherFinger(ref hand.MiddleDistal, side, direction);
+            rigOtherFinger(ref hand.MiddleIntermediate, side, direction);
+            rigOtherFinger(ref hand.MiddleProximal, side, direction);
 
-            rigOtherFinger(ref hand.RingDistal, side, invert);
-            rigOtherFinger(ref hand.RingIntermediate, side, invert);
-            rigOtherFinger(ref hand.RingProximal, side, invert);
+            rigOtherFinger(ref hand.RingDistal, side, direction);
+            rigOtherFinger(ref hand.RingIntermediate, side, direction);
+            rigOtherFinger(ref hand.RingProximal, side, direction);
 
-            rigOtherFinger(ref hand.LittleDistal, side, invert);
-            rigOtherFinger(ref hand.LittleIntermediate, side, invert);
-            rigOtherFinger(ref hand.LittleProximal, side, invert);
+            rigOtherFinger(ref hand.LittleDistal, side, direction);
+            rigOtherFinger(ref hand.LittleIntermediate, side, direction);
+            rigOtherFinger(ref hand.LittleProximal, side, direction);
         }
 
-        private static void rigOtherFinger(ref Vector3 tracked, Handedness side, int invert)
+        private static void rigOtherFinger(ref Vector3 tracked, Handedness side, int direction)
         {
             tracked.Z = Math.Clamp(
-                tracked.Z * -MathF.PI * invert,
+                tracked.Z * -MathF.PI * direction,
                 side == Handedness.Right ? -MathF.PI : 0f,
                 side == Handedness.Right ? 0f : MathF.PI
             );
         }
 
-        private static void rigThumbFinger(ref Vector3 tracked, Handedness side, HandSegment segment, int invert)
+        private static void rigThumbFinger(ref Vector3 tracked, Handedness side, HandSegment segment, int direction)
         {
             var damp = new Vector3(
                 segment == HandSegment.Proximal ? 2.2f : segment == HandSegment.Intermediate ? 0 : 0,
@@ -107,8 +107,8 @@ namespace Moetion.Hands
 
             var start = new Vector3(
                 segment == HandSegment.Proximal ? 1.2f : segment == HandSegment.Distral ? -0.2f : -0.2f,
-                segment == HandSegment.Proximal ? 1.1f * invert : segment == HandSegment.Distral ? 0.1f * invert : 0.1f * invert,
-                segment == HandSegment.Proximal ? 0.2f * invert : segment == HandSegment.Distral ? 0.2f * invert : 0.2f * invert
+                segment == HandSegment.Proximal ? 1.1f * direction : segment == HandSegment.Distral ? 0.1f * direction : 0.1f * direction,
+                segment == HandSegment.Proximal ? 0.2f * direction : segment == HandSegment.Distral ? 0.2f * direction : 0.2f * direction
             );
 
             var thumb = Vector3.Zero;
@@ -116,7 +116,7 @@ namespace Moetion.Hands
             if (segment == HandSegment.Proximal)
             {
                 thumb.Z = Math.Clamp(
-                    start.Z * tracked.Z * -MathF.PI * damp.Z * invert,
+                    start.Z * tracked.Z * -MathF.PI * damp.Z * direction,
                     side == Handedness.Right ? -1f : -0.3f,
                     side == Handedness.Right ? 0.3f : 1f
                 );
@@ -124,16 +124,16 @@ namespace Moetion.Hands
                     start.X * tracked.Z * -MathF.PI * damp.X, -0.6f, 0.3f
                 );
                 thumb.Y = Math.Clamp(
-                    start.Y * tracked.Z * -MathF.PI * damp.Y * invert,
+                    start.Y * tracked.Z * -MathF.PI * damp.Y * direction,
                     side == Handedness.Right ? -1f : -0.3f,
                     side == Handedness.Right ? 0.3f : 1f
                 );
             }
             else
             {
-                thumb.Z = Math.Clamp(start.Z + tracked.Z * -MathF.PI * damp.Z * invert, -2f, 2f);
+                thumb.Z = Math.Clamp(start.Z + tracked.Z * -MathF.PI * damp.Z * direction, -2f, 2f);
                 thumb.X = Math.Clamp(start.X + tracked.Z * -MathF.PI * damp.X, -2f, 2f);
-                thumb.Y = Math.Clamp(start.Y + tracked.Z * -MathF.PI * damp.Y * invert, -2f, 2f);
+                thumb.Y = Math.Clamp(start.Y + tracked.Z * -MathF.PI * damp.Y * direction, -2f, 2f);
             }
 
             tracked = thumb;
