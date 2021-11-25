@@ -9,9 +9,9 @@ namespace Moetion.Face
 {
     public sealed class FaceSolver
     {
-        public FaceData Solve(NormalizedLandmarkList list)
+        public Face Solve(NormalizedLandmarkList list)
         {
-            FaceData data = new FaceData();
+            Face data = new Face();
 
             //eye keypoints
             data.EyeInnerCornerL = list.Landmark[133].ToVector();
