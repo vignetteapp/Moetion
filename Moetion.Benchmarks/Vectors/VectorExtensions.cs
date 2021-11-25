@@ -1,4 +1,7 @@
-using System;
+// Copyright (c) The Vignette Authors
+// This file is part of Moetion.
+// Moetion is licensed under the Microsoft Reciprocal License. See LICENSE for details.
+
 using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using Moetion.Extensions;
@@ -11,16 +14,16 @@ namespace Moetion.Benchmarks.Vectors
     {
         private Vector2 v21 = new Vector2(Random.Shared.Next(), Random.Shared.Next());
         private Vector2 v22 = new Vector2(Random.Shared.Next(), Random.Shared.Next());
-        
+
         private Vector3 v31 = new Vector3(Random.Shared.Next(), Random.Shared.Next(), Random.Shared.Next());
         private Vector3 v32 = new Vector3(Random.Shared.Next(), Random.Shared.Next(), Random.Shared.Next());
 
-       [Benchmark]
+        [Benchmark]
         public void Vector2Distance()
         {
             v21.Distance(v22);
         }
-        
+
         [Benchmark]
         public void Vector3Distance()
         {

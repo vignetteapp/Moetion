@@ -15,7 +15,7 @@ indent_size = 2
 
 [*.cs]
 indent_size = 4
-file_header_template = Copyright (c) The Vignette Authors\nThis file is part of Moetion.\nMoetion is licensed under LGPL v3. See LICENSE.md for details.
+file_header_template = Copyright (c) The Vignette Authors\nThis file is part of Moetion.\nMoetion is licensed under the Microsoft Reciprocal License. See LICENSE for details.
 
 # Require File Header
 dotnet_diagnostic.IDE0073.severity = error

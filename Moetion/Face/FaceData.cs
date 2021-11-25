@@ -1,6 +1,6 @@
 // Copyright (c) The Vignette Authors
 // This file is part of Moetion.
-// Moetion is licensed under LGPL v3. See LICENSE.md for details.
+// Moetion is licensed under the Microsoft Reciprocal License. See LICENSE for details.
 
 using System.Numerics;
 
