@@ -12,12 +12,12 @@ namespace Moetion.Face
         // X, Y and Z represent 3D radian angles.
         // It looks like there are radians, normalized angles and degrees in the same struct.
         // Suggestion: only use one version of them (radians?)
-        public double X;
-        public double Y;
-        public double Z;
+        public float X;
+        public float Y;
+        public float Z;
 
-        public double Width;
-        public double Height;
+        public float Width;
+        public float Height;
 
         /// <summary>
         /// Center of face detection square.

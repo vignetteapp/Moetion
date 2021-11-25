@@ -9,19 +9,18 @@ namespace Moetion.Extensions
     public static class NumberExtensions
     {
         public static float Remap(this float val, float min, float max) => (Math.Clamp(val, min, max) - min) / (max - min);
-        public static double Remap(this double val, double min, double max) => (Math.Clamp(val, min, max) - min) / (max - min);
 
         /// <summary>
         /// Gets a normalized angle.
         /// </summary>
         /// <param name="radians">Angle in radians to normalize.</param>
         /// <returns>Normalized values to -1, 1.</returns>
-        public static double NormalizeAngle(this double radians)
+        public static float NormalizeAngle(this float radians)
         {
-            var twoPi = Math.PI * 2;
+            var twoPi = MathF.PI * 2;
             var angle = radians % twoPi;
-            angle = angle > Math.PI ? angle - twoPi : angle < -Math.PI ? twoPi + angle : angle;
-            return angle / Math.PI;
+            angle = angle > MathF.PI ? angle - twoPi : angle < -MathF.PI ? twoPi + angle : angle;
+            return angle / MathF.PI;
         }
     }
 }

@@ -13,18 +13,18 @@ namespace Moetion.Face
         public Vector3 EyeOuterCornerL;
         public Vector3 EyeOuterCornerR;
 
-        public double EyeInnerDistance;
-        public double EyeOuterDistance;
+        public float EyeInnerDistance;
+        public float EyeOuterDistance;
 
         public Vector3 UpperInnerLip;
         public Vector3 LowerInnerLip;
         public Vector3 MouthCornerLeft;
         public Vector3 MouthCornerRight;
 
-        public double MouthOpen;
-        public double MouthWidth;
+        public float MouthOpen;
+        public float MouthWidth;
 
-        public double RatioX;
-        public double RatioY;
+        public float RatioX;
+        public float RatioY;
     }
 }

@@ -12,22 +12,22 @@ namespace Moetion.Face
         /// <summary>
         /// How much the mouth tends to an 'A' shape.
         /// </summary>
-        public double A;
+        public float A;
         /// <summary>
         /// How much the mouth tends to an 'I' shape.
         /// </summary>
-        public double I;
+        public float I;
         /// <summary>
         /// How much the mouth tends to an 'U' shape.
         /// </summary>
-        public double U;
+        public float U;
         /// <summary>
         /// How much the mouth tends to an 'E' shape.
         /// </summary>
-        public double E;
+        public float E;
         /// <summary>
         /// How much the mouth tends to an 'O' shape.
         /// </summary>
-        public double O;
+        public float O;
     }
 }

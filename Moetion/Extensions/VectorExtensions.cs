@@ -9,11 +9,11 @@ namespace Moetion.Extensions
 {
     public static class VectorExtensions
     {
-        public static double Find2DAngle(double cx, double cy, double ex, double ey)
+        public static float Find2DAngle(float cx, float cy, float ex, float ey)
         {
             var dy = ey - cy;
             var dx = ex - cx;
-            return Math.Atan2(dy, dx);
+            return MathF.Atan2(dy, dx);
         }
 
         public static Vector2 Unit(this Vector2 vector) => vector / vector.Length();
@@ -25,9 +25,9 @@ namespace Moetion.Extensions
             {
                 return new Vector3
                 {
-                    X = (float)Find2DAngle(a.Z, a.Y, b.Z, b.Y).NormalizeAngle(),
-                    Y = (float)Find2DAngle(a.Z, a.X, b.Z, b.X).NormalizeAngle(),
-                    Z = (float)Find2DAngle(a.X, a.Y, b.X, b.Y).NormalizeAngle(),
+                    X = Find2DAngle(a.Z, a.Y, b.Z, b.Y).NormalizeAngle(),
+                    Y = Find2DAngle(a.Z, a.X, b.Z, b.X).NormalizeAngle(),
+                    Z = Find2DAngle(a.X, a.Y, b.X, b.Y).NormalizeAngle(),
                 };
             }
 
@@ -39,15 +39,15 @@ namespace Moetion.Extensions
             var unitX = qb.Unit();
             var unitY = Vector3.Cross(unitZ, unitX);
 
-            var beta = Math.Asin(unitZ.X);
-            var alpha = Math.Atan2(-unitZ.Y, unitZ.Z);
-            var gamma = Math.Atan2(-unitY.X, unitX.X);
+            var beta = MathF.Asin(unitZ.X);
+            var alpha = MathF.Atan2(-unitZ.Y, unitZ.Z);
+            var gamma = MathF.Atan2(-unitY.X, unitX.X);
 
             return new Vector3
             {
-                X = (float)alpha.NormalizeAngle(),
-                Y = (float)beta.NormalizeAngle(),
-                Z = (float)gamma.NormalizeAngle(),
+                X = alpha.NormalizeAngle(),
+                Y = beta.NormalizeAngle(),
+                Z = gamma.NormalizeAngle(),
             };
         }
     }

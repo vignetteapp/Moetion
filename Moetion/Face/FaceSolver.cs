@@ -96,9 +96,9 @@ namespace Moetion.Face
 
             return new Head
             {
-                X = rotate.X * Math.PI,
-                Y = rotate.Y * Math.PI,
-                Z = rotate.Z * Math.PI,
+                X = rotate.X * MathF.PI,
+                Y = rotate.Y * MathF.PI,
+                Z = rotate.Z * MathF.PI,
                 Width = width,
                 Height = height,
                 Position = Vector3.Lerp(midPoint, plane[2], 0.5f),

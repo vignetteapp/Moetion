@@ -9,11 +9,11 @@ namespace Moetion.Face
         /// <summary>
         /// Openness of the mouth horizontally.
         /// </summary>
-        public double X;
+        public float X;
         /// <summary>
         /// Openness of the mouth vertically.
         /// </summary>
-        public double Y;
+        public float Y;
         /// <summary>
         /// The vowel shape that the mouth is doing.
         /// </summary>
