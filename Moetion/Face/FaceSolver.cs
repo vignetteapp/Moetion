@@ -2,9 +2,6 @@
 // This file is part of Moetion.
 // Moetion is licensed under the Microsoft Reciprocal License. See LICENSE for details.
 
-using System.Collections;
-using Akihabara;
-using System.Numerics;
 using Akihabara.Framework.Protobuf;
 using Moetion.Extensions;
 

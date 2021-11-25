@@ -3,7 +3,6 @@
 // Moetion is licensed under the Microsoft Reciprocal License. See LICENSE for details.
 
 using System.Numerics;
-using Akihabara;
 using Akihabara.Framework.Protobuf;
 
 namespace Moetion.Extensions
