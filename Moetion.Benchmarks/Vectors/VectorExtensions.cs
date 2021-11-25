@@ -13,9 +13,6 @@ namespace Moetion.Benchmarks.Vectors
     [MemoryDiagnoser(displayGenColumns: false)]
     public class VectorExtensions
     {
-        private Vector2 v21 = new Vector2(Random.Shared.Next(), Random.Shared.Next());
-        private Vector2 v22 = new Vector2(Random.Shared.Next(), Random.Shared.Next());
-
         private Vector3 v31 = new Vector3(Random.Shared.Next(), Random.Shared.Next(), Random.Shared.Next());
         private Vector3 v32 = new Vector3(Random.Shared.Next(), Random.Shared.Next(), Random.Shared.Next());
     }
