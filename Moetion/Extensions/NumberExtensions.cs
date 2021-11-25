@@ -12,5 +12,18 @@ namespace Moetion.Extensions
         {
             return (Math.Clamp(val, min, max) - min) / (max - min);
         }
+
+        /// <summary>
+        /// Gets a normalized angle.
+        /// </summary>
+        /// <param name="radians">Angle in radians to normalize.</param>
+        /// <returns>Normalized values to -1, 1.</returns>
+        public static double NormalizeAngle(this double radians)
+        {
+            var twoPi = Math.PI * 2;
+            var angle = radians % twoPi;
+            angle = angle > Math.PI ? angle - twoPi : angle < -Math.PI ? twoPi + angle : angle;
+            return angle / Math.PI;
+        }
     }
 }
