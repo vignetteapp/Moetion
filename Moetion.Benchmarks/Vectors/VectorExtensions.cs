@@ -2,6 +2,7 @@
 // This file is part of Moetion.
 // Moetion is licensed under the Microsoft Reciprocal License. See LICENSE for details.
 
+using System;
 using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using Moetion.Extensions;
