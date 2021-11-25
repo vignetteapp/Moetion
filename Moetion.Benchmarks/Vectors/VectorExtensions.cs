@@ -18,17 +18,5 @@ namespace Moetion.Benchmarks.Vectors
 
         private Vector3 v31 = new Vector3(Random.Shared.Next(), Random.Shared.Next(), Random.Shared.Next());
         private Vector3 v32 = new Vector3(Random.Shared.Next(), Random.Shared.Next(), Random.Shared.Next());
-
-        [Benchmark]
-        public void Vector2Distance()
-        {
-            v21.Distance(v22);
-        }
-
-        [Benchmark]
-        public void Vector3Distance()
-        {
-            v31.Distance(v32);
-        }
     }
 }
