@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Moetion.Face
 {
-    public struct FaceData
+    public struct Face
     {
         public Vector3 EyeInnerCornerL;
         public Vector3 EyeInnerCornerR;
