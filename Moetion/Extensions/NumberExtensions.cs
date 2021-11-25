@@ -8,10 +8,8 @@ namespace Moetion.Extensions
 {
     public static class NumberExtensions
     {
-        public static double Remap(this double val, double min, double max)
-        {
-            return (Math.Clamp(val, min, max) - min) / (max - min);
-        }
+        public static float Remap(this float val, float min, float max) => (Math.Clamp(val, min, max) - min) / (max - min);
+        public static double Remap(this double val, double min, double max) => (Math.Clamp(val, min, max) - min) / (max - min);
 
         /// <summary>
         /// Gets a normalized angle.
