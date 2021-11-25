@@ -12,6 +12,13 @@ namespace Moetion.Face
 {
     public static class FaceSolver
     {
+        public static readonly int[] EyeLeftPoints = new int[] { 130, 133, 160, 159, 158, 144, 145, 153 };
+        public static readonly int[] EyeRightPoints = new int[] { 263, 362, 387, 386, 385, 373, 374, 380 };
+        public static readonly int[] BrowLeftPoints = new int[] { 35, 244, 63, 105, 66, 229, 230, 231 };
+        public static readonly int[] BrowRightPoints = new int[] { 265, 464, 293, 334, 296, 449, 450, 451 };
+        public static readonly int[] PupilLeftPoints = new int[] { 468, 469, 470, 471, 472 };
+        public static readonly int[] PupilRightPoints = new int[] { 473, 474, 475, 476, 477 };
+
         public static Face Solve(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
@@ -115,6 +122,63 @@ namespace Moetion.Face
                     Z = rotate.Z * 180,
                 },
             };
+        }
+
+        public static float GetEyeOpen(NormalizedLandmarkList list, Side side, float high = .85f, float low = .55f)
+        {
+            var landmarks = list.Landmark;
+
+            var eyePoints = side == Side.Right ? EyeRightPoints : EyeLeftPoints;
+            var eyeDistance = EyeLidRatio(
+                landmarks[eyePoints[0]],
+                landmarks[eyePoints[1]],
+                landmarks[eyePoints[2]],
+                landmarks[eyePoints[3]],
+                landmarks[eyePoints[4]],
+                landmarks[eyePoints[5]],
+                landmarks[eyePoints[6]],
+                landmarks[eyePoints[7]]);
+
+            // Human eye width to height ratio is roughly .3
+            var maxRatio = 0.285f;
+            // Compare ratio against max ratio
+            var ratio = Math.Clamp(eyeDistance / maxRatio, 0, 2);
+            // Remap eye open and close ratios to increase sensitivity
+            var eyeOpenRatio = ratio.Remap(low, high);
+
+            return eyeOpenRatio;
+        }
+
+        public static float EyeLidRatio(
+            NormalizedLandmark outerCorner,
+            NormalizedLandmark innerCorner,
+            NormalizedLandmark outerUpperLid,
+            NormalizedLandmark midUpperLid,
+            NormalizedLandmark innerUpperLid,
+            NormalizedLandmark outerLowerLid,
+            NormalizedLandmark midLowerLid,
+            NormalizedLandmark innerLowerLid)
+        {
+            var eyeOuterCorner = outerCorner.ToVector2();
+            var eyeInnerCorner = innerCorner.ToVector2();
+
+            var eyeOuterUpperLid = outerUpperLid.ToVector2();
+            var eyeMidUpperLid = midUpperLid.ToVector2();
+            var eyeInnerUpperLid = innerUpperLid.ToVector2();
+
+            var eyeOuterLowerLid = outerLowerLid.ToVector2();
+            var eyeMidLowerLid = midLowerLid.ToVector2();
+            var eyeInnerLowerLid = innerLowerLid.ToVector2();
+
+            // Use 2D Distances instead of 3D for less jitter
+            var eyeWidth = Vector2.Distance(eyeOuterCorner, eyeInnerCorner);
+            var eyeOuterLidDistance = Vector2.Distance(eyeOuterUpperLid, eyeOuterLowerLid);
+            var eyeMidLidDistance = Vector2.Distance(eyeMidUpperLid, eyeMidLowerLid);
+            var eyeInnerLidDistance = Vector2.Distance(eyeInnerUpperLid, eyeInnerLowerLid);
+            var eyeLidAvg = (eyeOuterLidDistance + eyeMidLidDistance + eyeInnerLidDistance) / 3;
+            var ratio = eyeLidAvg / eyeWidth;
+
+            return ratio;
         }
 
         public static Vector3[] FaceEulerPlane(NormalizedLandmarkList list)
