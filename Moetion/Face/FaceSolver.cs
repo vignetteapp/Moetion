@@ -7,9 +7,9 @@ using Moetion.Extensions;
 
 namespace Moetion.Face
 {
-    public sealed class FaceSolver
+    public static class FaceSolver
     {
-        public Face Solve(NormalizedLandmarkList list)
+        public static Face Solve(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
             Face data = new();
