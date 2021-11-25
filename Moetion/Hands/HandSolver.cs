@@ -12,7 +12,7 @@ namespace Moetion.Hands
 {
     public static class HandSolver
     {
-        public static Hand Solve(NormalizedLandmarkList list, Handedness side = Handedness.Left)
+        public static Hand Solve(NormalizedLandmarkList list, Side side = Side.Left)
         {
             var landmarks = list.Landmark;
 
@@ -21,14 +21,14 @@ namespace Moetion.Hands
                 Palm = new[]
                 {
                     landmarks[0].ToVector(),
-                    landmarks[side == Handedness.Right ? 17 : 5].ToVector(),
-                    landmarks[side == Handedness.Right ? 5 : 17].ToVector(),
+                    landmarks[side == Side.Right ? 17 : 5].ToVector(),
+                    landmarks[side == Side.Right ? 5 : 17].ToVector(),
                 }
             };
 
             hand.HandRotation = getRotation(hand.Palm[0], hand.Palm[1], hand.Palm[2]);
             hand.HandRotation.Y = hand.HandRotation.Z;
-            hand.HandRotation.Y -= side == Handedness.Left ? 0.4f : 0.4f;
+            hand.HandRotation.Y -= side == Side.Left ? 0.4f : 0.4f;
 
             hand.Wrist = new Vector3(hand.HandRotation.X, hand.HandRotation.Y, hand.HandRotation.Z);
 
@@ -57,15 +57,15 @@ namespace Moetion.Hands
             return hand;
         }
 
-        private static void rigFingers(ref Hand hand, Handedness side)
+        private static void rigFingers(ref Hand hand, Side side)
         {
-            int direction = side == Handedness.Right ? 1 : -1;
+            int direction = side == Side.Right ? 1 : -1;
 
             hand.Wrist.X = Math.Clamp(hand.Wrist.X * 2 * direction, -0.3f, 0.3f);
             hand.Wrist.Y = Math.Clamp(
                 hand.Wrist.Y * 2.3f,
-                side == Handedness.Right ? -1.2f : -0.6f,
-                side == Handedness.Right ? 0.6f : 1.6f);
+                side == Side.Right ? -1.2f : -0.6f,
+                side == Side.Right ? 0.6f : 1.6f);
             hand.Wrist.Z = hand.Wrist.Z * -2.3f * direction;
 
             rigThumbFinger(ref hand.ThumbProximal, side, HandSegment.Proximal, direction);
@@ -89,16 +89,16 @@ namespace Moetion.Hands
             rigOtherFinger(ref hand.LittleProximal, side, direction);
         }
 
-        private static void rigOtherFinger(ref Vector3 tracked, Handedness side, int direction)
+        private static void rigOtherFinger(ref Vector3 tracked, Side side, int direction)
         {
             tracked.Z = Math.Clamp(
                 tracked.Z * -MathF.PI * direction,
-                side == Handedness.Right ? -MathF.PI : 0f,
-                side == Handedness.Right ? 0f : MathF.PI
+                side == Side.Right ? -MathF.PI : 0f,
+                side == Side.Right ? 0f : MathF.PI
             );
         }
 
-        private static void rigThumbFinger(ref Vector3 tracked, Handedness side, HandSegment segment, int direction)
+        private static void rigThumbFinger(ref Vector3 tracked, Side side, HandSegment segment, int direction)
         {
             var damp = new Vector3(
                 segment == HandSegment.Proximal ? 2.2f : segment == HandSegment.Intermediate ? 0 : 0,
@@ -118,16 +118,16 @@ namespace Moetion.Hands
             {
                 thumb.Z = Math.Clamp(
                     start.Z * tracked.Z * -MathF.PI * damp.Z * direction,
-                    side == Handedness.Right ? -1f : -0.3f,
-                    side == Handedness.Right ? 0.3f : 1f
+                    side == Side.Right ? -1f : -0.3f,
+                    side == Side.Right ? 0.3f : 1f
                 );
                 thumb.X = Math.Clamp(
                     start.X * tracked.Z * -MathF.PI * damp.X, -0.6f, 0.3f
                 );
                 thumb.Y = Math.Clamp(
                     start.Y * tracked.Z * -MathF.PI * damp.Y * direction,
-                    side == Handedness.Right ? -1f : -0.3f,
-                    side == Handedness.Right ? 0.3f : 1f
+                    side == Side.Right ? -1f : -0.3f,
+                    side == Side.Right ? 0.3f : 1f
                 );
             }
             else
@@ -201,7 +201,7 @@ namespace Moetion.Hands
         }
     }
 
-    public enum Handedness
+    public enum Side
     {
         Left,
         Right,
