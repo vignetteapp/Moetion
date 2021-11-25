@@ -200,10 +200,4 @@ namespace Moetion.Hands
             Distral,
         }
     }
-
-    public enum Side
-    {
-        Left,
-        Right,
-    }
 }
