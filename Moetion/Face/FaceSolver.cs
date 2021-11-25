@@ -11,22 +11,23 @@ namespace Moetion.Face
     {
         public Face Solve(NormalizedLandmarkList list)
         {
+            var landmarks = list.Landmark;
             Face data = new();
 
             //eye keypoints
-            data.EyeInnerCornerL = list.Landmark[133].ToVector();
-            data.EyeInnerCornerR = list.Landmark[362].ToVector();
-            data.EyeOuterCornerL = list.Landmark[130].ToVector();
+            data.EyeInnerCornerL = landmarks[133].ToVector();
+            data.EyeInnerCornerR = landmarks[362].ToVector();
+            data.EyeOuterCornerL = landmarks[130].ToVector();
 
             //eye keypoint distances
             data.EyeInnerDistance = data.EyeInnerCornerL.Distance(data.EyeInnerCornerR);
             data.EyeOuterDistance = data.EyeOuterCornerL.Distance(data.EyeOuterCornerR);
 
             //mouth keypoints
-            data.UpperInnerLip = list.Landmark[13].ToVector();
-            data.LowerInnerLip = list.Landmark[14].ToVector();
-            data.MouthCornerLeft = list.Landmark[61].ToVector();
-            data.MouthCornerRight = list.Landmark[291].ToVector();
+            data.UpperInnerLip = landmarks[13].ToVector();
+            data.LowerInnerLip = landmarks[14].ToVector();
+            data.MouthCornerLeft = landmarks[61].ToVector();
+            data.MouthCornerRight = landmarks[291].ToVector();
 
             //mouth keypoint distances
             data.MouthOpen = data.UpperInnerLip.Distance(data.LowerInnerLip);
