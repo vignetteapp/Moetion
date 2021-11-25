@@ -11,7 +11,7 @@ namespace Moetion.Face
     {
         public Face Solve(NormalizedLandmarkList list)
         {
-            Face data = new Face();
+            Face data = new();
 
             //eye keypoints
             data.EyeInnerCornerL = list.Landmark[133].ToVector();
