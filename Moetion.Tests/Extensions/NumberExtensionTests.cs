@@ -33,7 +33,8 @@ namespace Moetion.Tests.Extensions
             float remapped = number.Remap(-1f, 1f);
 
             //it should be >= -1 and <= 1
-            Assert.LessOrEqual(Math.Abs(remapped), 1f);
+            Assert.GreaterOrEqual(remapped, -1f);
+            Assert.LessOrEqual(remapped, 1f);
         }
 
         [Test]
