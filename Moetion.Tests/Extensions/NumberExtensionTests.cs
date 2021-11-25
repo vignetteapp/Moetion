@@ -29,12 +29,11 @@ namespace Moetion.Tests.Extensions
             //get random float between -10 and 10
             float number = 10f / Random.Shared.Next(-1000000, 1000000);
 
-            //remap it between 0 and 1
+            //remap it between -1 and 1
             float remapped = number.Remap(-1f, 1f);
 
-            //it should be <= 1 and >= -1
-            Assert.LessOrEqual(remapped, 1f);
-            Assert.GreaterOrEqual(remapped, -1f);
+            //it should be >= -1 and <= 1
+            Assert.LessOrEqual(Math.Abs(remapped), 1f);
         }
 
         [Test]
