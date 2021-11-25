@@ -49,8 +49,8 @@ namespace Moetion.Tests.Extensions
             //multiply it by PI because trigonometry
             normalized *= MathF.PI;
 
-            //since it was already normalized nothing should happen
-            Assert.AreEqual(angle, normalized);
+            //since it was already normalized nothing should happen (account for precision loss)
+            Assert.Less(Math.Abs(angle - normalized), 0.0001);
         }
     }
 }
