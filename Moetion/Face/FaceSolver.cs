@@ -17,7 +17,7 @@ namespace Moetion.Face
             return face;
         }
 
-        public static Mouth calcMouth(NormalizedLandmarkList list)
+        public static Mouth CalcMouth(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
             Mouth data = new();
