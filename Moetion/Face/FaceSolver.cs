@@ -12,28 +12,41 @@ namespace Moetion.Face
         public static Face Solve(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
-            Face data = new();
+            Face face = new();
 
-            //eye keypoints
-            data.EyeInnerCornerL = landmarks[133].ToVector();
-            data.EyeInnerCornerR = landmarks[362].ToVector();
-            data.EyeOuterCornerL = landmarks[130].ToVector();
+            return face;
+        }
 
-            //eye keypoint distances
-            data.EyeInnerDistance = data.EyeInnerCornerL.Distance(data.EyeInnerCornerR);
-            data.EyeOuterDistance = data.EyeOuterCornerL.Distance(data.EyeOuterCornerR);
+        public static Mouth calcMouth(NormalizedLandmarkList list)
+        {
+            var landmarks = list.Landmark;
+            Mouth data = new();
 
-            //mouth keypoints
-            data.UpperInnerLip = landmarks[13].ToVector();
-            data.LowerInnerLip = landmarks[14].ToVector();
-            data.MouthCornerLeft = landmarks[61].ToVector();
-            data.MouthCornerRight = landmarks[291].ToVector();
+            // Eye keypoints
+            var eyeInnerCornerL = landmarks[133].ToVector();
+            var eyeInnerCornerR = landmarks[362].ToVector();
+            var eyeOuterCornerL = landmarks[130].ToVector();
+            var eyeOuterCornerR = landmarks[263].ToVector();
 
-            //mouth keypoint distances
-            data.MouthOpen = data.UpperInnerLip.Distance(data.LowerInnerLip);
-            data.MouthWidth = data.MouthCornerLeft.Distance(data.MouthCornerRight);
+            // Eye keypoint distances
+            var eyeInnerDistance = eyeInnerCornerL.Distance(eyeInnerCornerR);
+            var eyeOuterDistance = eyeOuterCornerL.Distance(eyeOuterCornerR);
 
-            //mouth open and shape ratios
+            // Mouth keypoints
+            var upperInnerLip = landmarks[13].ToVector();
+            var lowerInnerLip = landmarks[14].ToVector();
+            var mouthCornerLeft = landmarks[61].ToVector();
+            var mouthCornerRight = landmarks[291].ToVector();
+
+            // Mouth keypoint distances
+            var mouthOpen = upperInnerLip.Distance(lowerInnerLip);
+            var mouthWidth = mouthCornerLeft.Distance(mouthCornerRight);
+
+            // Mouth open and mouth shape ratios
+            // var ratioXY = mouthWidth / mouthOpen;
+            var ratioY = mouthOpen / eyeInnerDistance;
+            var ratioX = mouthWidth / eyeOuterDistance;
+
 
             return data;
         }
