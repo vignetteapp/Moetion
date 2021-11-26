@@ -27,6 +27,7 @@ namespace Moetion.Face
             return face;
         }
 
+        #region Mouth Calculations
         public static Mouth CalcMouth(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
@@ -85,7 +86,9 @@ namespace Moetion.Face
                 },
             };
         }
+        #endregion
 
+        #region Head Calculations
         public static Head CalcHead(NormalizedLandmarkList list)
         {
             // Find 3 vectors that form a plane to represent the head
@@ -124,6 +127,23 @@ namespace Moetion.Face
             };
         }
 
+        public static Vector3[] FaceEulerPlane(NormalizedLandmarkList list)
+        {
+            var landmarks = list.Landmark;
+
+            // Create face detection square bounds
+            var topLeft = landmarks[21].ToVector();
+            var topRight = landmarks[251].ToVector();
+            var bottomRight = landmarks[397].ToVector();
+            var bottomLeft = landmarks[172].ToVector();
+            var bottomMidpoint = Vector3.Lerp(bottomRight, bottomLeft, 0.5f);
+
+            // TODO: idk, this array processing looks ugly.
+            return new Vector3[] { topLeft, topRight, bottomMidpoint };
+        }
+        #endregion
+
+        #region Eye Calculations
         public static float GetEyeOpen(NormalizedLandmarkList list, Side side, float high = .85f, float low = .55f)
         {
             var landmarks = list.Landmark;
@@ -180,20 +200,6 @@ namespace Moetion.Face
 
             return ratio;
         }
-
-        public static Vector3[] FaceEulerPlane(NormalizedLandmarkList list)
-        {
-            var landmarks = list.Landmark;
-
-            // Create face detection square bounds
-            var topLeft = landmarks[21].ToVector();
-            var topRight = landmarks[251].ToVector();
-            var bottomRight = landmarks[397].ToVector();
-            var bottomLeft = landmarks[172].ToVector();
-            var bottomMidpoint = Vector3.Lerp(bottomRight, bottomLeft, 0.5f);
-
-            // TODO: idk, this array processing looks ugly.
-            return new Vector3[] { topLeft, topRight, bottomMidpoint };
-        }
+        #endregion
     }
 }
