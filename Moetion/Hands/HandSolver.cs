@@ -26,11 +26,11 @@ namespace Moetion.Hands
                 }
             };
 
-            hand.HandRotation = getRotation(hand.Palm[0], hand.Palm[1], hand.Palm[2]);
-            hand.HandRotation.Y = hand.HandRotation.Z;
-            hand.HandRotation.Y -= side == Side.Left ? 0.4f : 0.4f;
+            hand.Rotation = getRotation(hand.Palm[0], hand.Palm[1], hand.Palm[2]);
+            hand.Rotation.Y = hand.Rotation.Z;
+            hand.Rotation.Y -= side == Side.Left ? 0.4f : 0.4f;
 
-            hand.Wrist = new Vector3(hand.HandRotation.X, hand.HandRotation.Y, hand.HandRotation.Z);
+            hand.Wrist = new Vector3(hand.Rotation.X, hand.Rotation.Y, hand.Rotation.Z);
 
             hand.RingProximal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 0, 13, 14));
             hand.RingIntermediate = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 13, 14, 15));
