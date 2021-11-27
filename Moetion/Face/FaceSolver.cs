@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using Akihabara.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.VectorExtensions;
+using static Moetion.Extensions.NumberExtensions;
 
 namespace Moetion.Face
 {
@@ -224,6 +225,40 @@ namespace Moetion.Face
             var ratioY = 4 * dy / (eyeWidth / 4);
 
             return new Vector2(ratioX, ratioY);
+        }
+
+        public static void StabilizeBlink(ref Eyes eyes, float headY, bool enableWink = true, float maxRotation = .5f)
+        {
+            eyes.Left = Math.Clamp(eyes.Left, 0, 1);
+            eyes.Right = Math.Clamp(eyes.Right, 0, 1);
+
+            // Difference between each eye
+            var blinkDiff = MathF.Abs(eyes.Left - eyes.Right);
+            // Threshold to which difference is considered a wink
+            var blinkThresh = enableWink ? .8f : 1.2f;
+
+            var isClosing = eyes.Left < .3f && eyes.Right < .3f;
+            var isOpening = eyes.Left > .6f && eyes.Right > .6f;
+
+            // Sets obstructed eye to the opposite eye value
+            if (headY > maxRotation)
+            {
+                eyes.Left = eyes.Right;
+                return;
+            }
+            if (headY < -maxRotation)
+            {
+                eyes.Right = eyes.Left;
+                return;
+            }
+
+            // Wink of averaged blink values
+            if (!(blinkDiff >= blinkThresh && !isClosing && !isOpening))
+            {
+                var value = Lerp(eyes.Right, eyes.Left, eyes.Right > eyes.Left ? .95f : .05f);
+                eyes.Left = value;
+                eyes.Right = value;
+            }
         }
         #endregion
     }
