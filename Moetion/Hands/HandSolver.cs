@@ -149,12 +149,5 @@ namespace Moetion.Hands
                 isRight ? 0 : MathF.PI
             );
         }
-
-        private enum HandSegment
-        {
-            Proximal,
-            Intermediate,
-            Distral,
-        }
     }
 }
