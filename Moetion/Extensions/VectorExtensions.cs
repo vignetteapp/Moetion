@@ -50,5 +50,23 @@ namespace Moetion.Extensions
                 Z = gamma.NormalizeAngle(),
             };
         }
+
+        /// <summary>
+        /// Find 2D angle between 3 points in 3D space.
+        /// </summary>
+        /// <returns>Single angle normalized to 0, 1.</returns>
+        public static float AngleBetween3DCoords(Vector3 a, Vector3 b, Vector3 c)
+        {
+            var v1 = a - b;
+            var v2 = c - b;
+
+            var v1Norm = v1.Unit();
+            var v2Norm = v2.Unit();
+
+            var dotProducts = Vector3.Dot(v1Norm, v2Norm);
+            var angle = MathF.Acos(dotProducts);
+
+            return angle.NormalizeRadians();
+        }
     }
 }

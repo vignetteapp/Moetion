@@ -7,6 +7,7 @@ using System.Numerics;
 using Akihabara.Framework.Protobuf;
 using Google.Protobuf.Collections;
 using Moetion.Extensions;
+using static Moetion.Extensions.VectorExtensions;
 
 namespace Moetion.Hands
 {
@@ -32,25 +33,25 @@ namespace Moetion.Hands
 
             hand.Wrist = new Vector3(hand.Rotation.X, hand.Rotation.Y, hand.Rotation.Z);
 
-            hand.RingProximal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 0, 13, 14));
-            hand.RingIntermediate = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 13, 14, 15));
-            hand.RingDistal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 14, 15, 16));
+            hand.RingProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 13, 14));
+            hand.RingIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(13, 14, 15));
+            hand.RingDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(14, 15, 16));
 
-            hand.IndexProximal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 0, 5, 6));
-            hand.IndexIntermediate = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 5, 6, 7));
-            hand.IndexDistal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 6, 7, 8));
+            hand.IndexProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 5, 6));
+            hand.IndexIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(5, 6, 7));
+            hand.IndexDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(6, 7, 8));
 
-            hand.MiddleProximal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 0, 9, 10));
-            hand.MiddleIntermediate = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 9, 10, 11));
-            hand.MiddleDistal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 10, 11, 12));
+            hand.MiddleProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 9, 10));
+            hand.MiddleIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(9, 10, 11));
+            hand.MiddleDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(10, 11, 12));
 
-            hand.ThumbProximal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 0, 1, 2));
-            hand.ThumbIntermediate = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 1, 2, 3));
-            hand.ThumbDistal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 2, 3, 4));
+            hand.ThumbProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 1, 2));
+            hand.ThumbIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(1, 2, 3));
+            hand.ThumbDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(2, 3, 4));
 
-            hand.LittleProximal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 0, 17, 18));
-            hand.LittleIntermediate = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 17, 18, 19));
-            hand.LittleDistal = new Vector3(0, 0, getAngleBetween3DCoords(landmarks, 18, 19, 20));
+            hand.LittleProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 17, 18));
+            hand.LittleIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(17, 18, 19));
+            hand.LittleDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(18, 19, 20));
 
             rigFingers(ref hand, side);
 
@@ -150,47 +151,11 @@ namespace Moetion.Hands
             var unitX = Vector3.Divide(qb, MathF.Sqrt(Vector3.Dot(qb, qb)));
             var unitY = Vector3.Cross(unitZ, unitX);
 
-            float pitch = normalizeAngle(MathF.Asin(unitZ.X));
-            float roll = normalizeAngle(MathF.Atan2(-unitZ.Y, unitZ.Z));
-            float yaw = normalizeAngle(MathF.Atan2(-unitY.X, unitX.X));
+            float pitch = MathF.Asin(unitZ.X).NormalizeAngle();
+            float roll = MathF.Atan2(-unitZ.Y, unitZ.Z).NormalizeAngle();
+            float yaw = MathF.Atan2(-unitY.X, unitX.X).NormalizeAngle();
 
             return Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll);
-
-            static float normalizeAngle(float radians)
-            {
-                float angle = radians % MathF.Tau;
-                angle = angle > MathF.PI ? angle - MathF.Tau : angle < -MathF.PI ? MathF.Tau + angle : angle;
-                return angle / MathF.PI;
-            }
-        }
-
-        private static float getAngleBetween3DCoords(RepeatedField<NormalizedLandmark> lm, int a, int b, int c)
-            => getAngleBetween3DCoords(lm[a].ToVector(), lm[b].ToVector(), lm[c].ToVector());
-
-        private static float getAngleBetween3DCoords(Vector3 a, Vector3 b, Vector3 c)
-        {
-            var v1 = Vector3.Subtract(a, b);
-            var v2 = Vector3.Subtract(c, b);
-            var v1norm = Vector3.Divide(v1, MathF.Sqrt(Vector3.Dot(v1, v1)));
-            var v2norm = Vector3.Divide(v2, MathF.Sqrt(Vector3.Dot(v2, v2)));
-            var dotProducts = Vector3.Dot(v1norm, v2norm);
-            var angle = MathF.Acos(dotProducts);
-
-            return normalizeRadians(angle);
-
-            static float normalizeRadians(float radians)
-            {
-                if (radians >= MathF.PI / 2)
-                    radians -= 2 * MathF.PI;
-
-                if (radians <= -MathF.PI / 2)
-                {
-                    radians += 2 * MathF.PI;
-                    radians = MathF.PI - radians;
-                }
-
-                return radians / MathF.PI;
-            }
         }
 
         private enum HandSegment
