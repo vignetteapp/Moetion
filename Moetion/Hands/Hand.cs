@@ -9,7 +9,8 @@ namespace Moetion.Hands
     public struct Hand
     {
         public Vector3[] Palm;
-        public Quaternion Rotation;
+        // TODO: convert to Quaternion
+        public Vector3 Rotation;
         public Vector3 Wrist;
 
         #region Thumb
