@@ -4,6 +4,7 @@
 
 using System;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using Akihabara.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.VectorExtensions;
@@ -199,6 +200,30 @@ namespace Moetion.Face
             var ratio = eyeLidAvg / eyeWidth;
 
             return ratio;
+        }
+
+        /// <summary>
+        /// Calculates pupil position [-1, 1].
+        /// </summary>
+        public static Vector2 PupilPos(NormalizedLandmarkList list, Side side)
+        {
+            var landmarks = list.Landmark;
+
+            var eyePoints = side == Side.Right ? EyeRightPoints : EyeLeftPoints;
+            var eyeOuterCorner = landmarks[eyePoints[0]].ToVector();
+            var eyeInnerCorner = landmarks[eyePoints[1]].ToVector();
+            var eyeWidth = Vector2.Distance(eyeOuterCorner.ToVector2(), eyeInnerCorner.ToVector2());
+            var midPoint = Vector3.Lerp(eyeOuterCorner, eyeInnerCorner, .5f);
+
+            var pupilPoints = side == Side.Right ? PupilRightPoints : PupilLeftPoints;
+            var pupil = landmarks[pupilPoints[0]].ToVector();
+            var dx = midPoint.X - pupil.X;
+            var dy = midPoint.Y - pupil.Y - eyeWidth * .075f;
+
+            var ratioX = 4 * dx / (eyeWidth / 2);
+            var ratioY = 4 * dy / (eyeWidth / 4);
+
+            return new Vector2(ratioX, ratioY);
         }
         #endregion
     }

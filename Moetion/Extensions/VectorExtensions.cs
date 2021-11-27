@@ -19,6 +19,8 @@ namespace Moetion.Extensions
         public static Vector2 Unit(this Vector2 vector) => vector / vector.Length();
         public static Vector3 Unit(this Vector3 vector) => vector / vector.Length();
 
+        public static Vector2 ToVector2(this Vector3 vector) => new Vector2 { X = vector.X, Y = vector.Y };
+
         public static Vector3 RollPitchYaw(Vector3 a, Vector3 b, Vector3? c)
         {
             if (c == null)
