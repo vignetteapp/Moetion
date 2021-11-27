@@ -13,7 +13,7 @@ namespace Moetion.Hands
 {
     public static class HandSolver
     {
-        public static Hand Solve(NormalizedLandmarkList list, Side side = Side.Left)
+        public static Hand Solve(NormalizedLandmarkList list, Side side)
         {
             var landmarks = list.Landmark;
 
@@ -27,7 +27,7 @@ namespace Moetion.Hands
                 }
             };
 
-            hand.Rotation = getRotation(hand.Palm[0], hand.Palm[1], hand.Palm[2]);
+            hand.Rotation = RollPitchYaw(hand.Palm[0], hand.Palm[1], hand.Palm[2]);
             hand.Rotation.Y = hand.Rotation.Z;
             hand.Rotation.Y -= side == Side.Left ? 0.4f : 0.4f;
 
@@ -60,102 +60,94 @@ namespace Moetion.Hands
 
         private static void rigFingers(ref Hand hand, Side side)
         {
-            int direction = side == Side.Right ? 1 : -1;
+            var isRight = side == Side.Right;
+            var sideFactor = isRight ? 1 : -1;
 
-            hand.Wrist.X = Math.Clamp(hand.Wrist.X * 2 * direction, -0.3f, 0.3f);
-            hand.Wrist.Y = Math.Clamp(
-                hand.Wrist.Y * 2.3f,
-                side == Side.Right ? -1.2f : -0.6f,
-                side == Side.Right ? 0.6f : 1.6f);
-            hand.Wrist.Z = hand.Wrist.Z * -2.3f * direction;
+            hand.Wrist.X = Math.Clamp(hand.Wrist.X * 2 * sideFactor, -.3f, .3f);
+            hand.Wrist.Y = Math.Clamp(hand.Wrist.Y * 2.3f, isRight ? -1.2f : -0.6f, isRight ? .6f : 1.6f);
+            hand.Wrist.Z *= -2.3f * sideFactor;
 
-            rigThumbFinger(ref hand.ThumbProximal, side, HandSegment.Proximal, direction);
-            rigThumbFinger(ref hand.ThumbIntermediate, side, HandSegment.Intermediate, direction);
-            rigThumbFinger(ref hand.ThumbDistal, side, HandSegment.Distral, direction);
-
-            rigOtherFinger(ref hand.IndexDistal, side, direction);
-            rigOtherFinger(ref hand.IndexIntermediate, side, direction);
-            rigOtherFinger(ref hand.IndexProximal, side, direction);
-
-            rigOtherFinger(ref hand.MiddleDistal, side, direction);
-            rigOtherFinger(ref hand.MiddleIntermediate, side, direction);
-            rigOtherFinger(ref hand.MiddleProximal, side, direction);
-
-            rigOtherFinger(ref hand.RingDistal, side, direction);
-            rigOtherFinger(ref hand.RingIntermediate, side, direction);
-            rigOtherFinger(ref hand.RingProximal, side, direction);
-
-            rigOtherFinger(ref hand.LittleDistal, side, direction);
-            rigOtherFinger(ref hand.LittleIntermediate, side, direction);
-            rigOtherFinger(ref hand.LittleProximal, side, direction);
-        }
-
-        private static void rigOtherFinger(ref Vector3 tracked, Side side, int direction)
-        {
-            tracked.Z = Math.Clamp(
-                tracked.Z * -MathF.PI * direction,
-                side == Side.Right ? -MathF.PI : 0f,
-                side == Side.Right ? 0f : MathF.PI
-            );
-        }
-
-        private static void rigThumbFinger(ref Vector3 tracked, Side side, HandSegment segment, int direction)
-        {
-            var damp = new Vector3(
-                segment == HandSegment.Proximal ? 2.2f : segment == HandSegment.Intermediate ? 0 : 0,
-                segment == HandSegment.Proximal ? 2.2f : segment == HandSegment.Intermediate ? 0.7f : 1f,
-                segment == HandSegment.Proximal ? 0.5f : segment == HandSegment.Intermediate ? 0.5f : 0.5f
-            );
-
-            var start = new Vector3(
-                segment == HandSegment.Proximal ? 1.2f : segment == HandSegment.Distral ? -0.2f : -0.2f,
-                segment == HandSegment.Proximal ? 1.1f * direction : segment == HandSegment.Distral ? 0.1f * direction : 0.1f * direction,
-                segment == HandSegment.Proximal ? 0.2f * direction : segment == HandSegment.Distral ? 0.2f * direction : 0.2f * direction
-            );
-
-            var thumb = Vector3.Zero;
-
-            if (segment == HandSegment.Proximal)
+            #region Thumb
             {
-                thumb.Z = Math.Clamp(
-                    start.Z * tracked.Z * -MathF.PI * damp.Z * direction,
-                    side == Side.Right ? -1f : -0.3f,
-                    side == Side.Right ? 0.3f : 1f
-                );
-                thumb.X = Math.Clamp(
-                    start.X * tracked.Z * -MathF.PI * damp.X, -0.6f, 0.3f
-                );
-                thumb.Y = Math.Clamp(
-                    start.Y * tracked.Z * -MathF.PI * damp.Y * direction,
-                    side == Side.Right ? -1f : -0.3f,
-                    side == Side.Right ? 0.3f : 1f
-                );
-            }
-            else
-            {
-                thumb.Z = Math.Clamp(start.Z + tracked.Z * -MathF.PI * damp.Z * direction, -2f, 2f);
-                thumb.X = Math.Clamp(start.X + tracked.Z * -MathF.PI * damp.X, -2f, 2f);
-                thumb.Y = Math.Clamp(start.Y + tracked.Z * -MathF.PI * damp.Y * direction, -2f, 2f);
-            }
+                #region Proximal
+                var dampener = new Vector3(2.2f, 2.2f, .5f);
+                var startPos = new Vector3(1.2f, 1.1f * sideFactor, .2f * sideFactor);
 
-            tracked = thumb;
+                var newThumbProximal = new Vector3
+                {
+                    X = Math.Clamp(
+                        startPos.X + hand.ThumbProximal.Z * -MathF.PI * dampener.X,
+                        -.6f, .3f
+                    ),
+                    Y = Math.Clamp(
+                        startPos.Y + hand.ThumbProximal.Z * -MathF.PI * dampener.Y * sideFactor,
+                        isRight ? -1 : -.3f, isRight ? .3f : 1
+                    ),
+                    Z = Math.Clamp(
+                        startPos.Z + hand.ThumbProximal.Z * -MathF.PI * dampener.Z * sideFactor,
+                        isRight ? -.6f : -.3f, isRight ? .3f : .6f
+                    ),
+                };
+
+                hand.ThumbProximal = newThumbProximal;
+                #endregion
+            }
+            {
+                #region Intermediate
+                var dampener = new Vector3(0, .7f, .5f);
+                var startPos = new Vector3(-.2f, .1f * sideFactor, .2f * sideFactor);
+
+                var newThumbIntermediate = new Vector3
+                {
+                    X = Math.Clamp(startPos.X + hand.ThumbIntermediate.Z * MathF.PI * dampener.X, -2, 2),
+                    Y = Math.Clamp(startPos.Y + hand.ThumbIntermediate.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
+                    Z = Math.Clamp(startPos.Z + hand.ThumbIntermediate.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
+                };
+
+                hand.ThumbIntermediate = newThumbIntermediate;
+                #endregion
+            }
+            {
+                #region Distal
+                var dampener = new Vector3(0, 1, .5f);
+                var startPos = new Vector3(-.2f, .1f * sideFactor, .2f * sideFactor);
+
+                var newThumbDistal = new Vector3
+                {
+                    X = Math.Clamp(startPos.X + hand.ThumbDistal.Z * MathF.PI * dampener.X, -2, 2),
+                    Y = Math.Clamp(startPos.Y + hand.ThumbDistal.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
+                    Z = Math.Clamp(startPos.Z + hand.ThumbDistal.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
+                };
+
+                hand.ThumbDistal = newThumbDistal;
+                #endregion
+            }
+            #endregion
+
+            rigOtherFingerSegment(ref hand.IndexProximal, side);
+            rigOtherFingerSegment(ref hand.IndexIntermediate, side);
+            rigOtherFingerSegment(ref hand.IndexDistal, side);
+            rigOtherFingerSegment(ref hand.MiddleProximal, side);
+            rigOtherFingerSegment(ref hand.MiddleIntermediate, side);
+            rigOtherFingerSegment(ref hand.MiddleDistal, side);
+            rigOtherFingerSegment(ref hand.RingProximal, side);
+            rigOtherFingerSegment(ref hand.RingIntermediate, side);
+            rigOtherFingerSegment(ref hand.RingDistal, side);
+            rigOtherFingerSegment(ref hand.LittleProximal, side);
+            rigOtherFingerSegment(ref hand.LittleIntermediate, side);
+            rigOtherFingerSegment(ref hand.LittleDistal, side);
         }
 
-        private static Quaternion getRotation(Vector3 a, Vector3 b, Vector3 c)
+        private static void rigOtherFingerSegment(ref Vector3 segment, Side side)
         {
-            var qb = Vector3.Subtract(b, a);
-            var qc = Vector3.Subtract(c, a);
-            var n = Vector3.Cross(qb, qc);
+            var isRight = side == Side.Right;
+            var sideFactor = isRight ? 1 : -1;
 
-            var unitZ = Vector3.Divide(n, MathF.Sqrt(Vector3.Dot(n, n)));
-            var unitX = Vector3.Divide(qb, MathF.Sqrt(Vector3.Dot(qb, qb)));
-            var unitY = Vector3.Cross(unitZ, unitX);
-
-            float pitch = MathF.Asin(unitZ.X).NormalizeAngle();
-            float roll = MathF.Atan2(-unitZ.Y, unitZ.Z).NormalizeAngle();
-            float yaw = MathF.Atan2(-unitY.X, unitX.X).NormalizeAngle();
-
-            return Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll);
+            segment.Z = Math.Clamp(
+                segment.Z * -MathF.PI * sideFactor,
+                isRight ? -MathF.PI : 0,
+                isRight ? 0 : MathF.PI
+            );
         }
 
         private enum HandSegment
