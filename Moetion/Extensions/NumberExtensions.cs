@@ -10,6 +10,9 @@ namespace Moetion.Extensions
     {
         public static float Remap(this float val, float min, float max) => (Math.Clamp(val, min, max) - min) / (max - min);
 
+        public static float Lerp(float a, float b, float t) => (b - a) * t + a;
+
+
         /// <summary>
         /// Gets a normalized angle.
         /// </summary>
