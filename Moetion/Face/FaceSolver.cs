@@ -161,7 +161,8 @@ namespace Moetion.Face
                 landmarks[eyePoints[4]],
                 landmarks[eyePoints[5]],
                 landmarks[eyePoints[6]],
-                landmarks[eyePoints[7]]);
+                landmarks[eyePoints[7]]
+            );
 
             // Human eye width to height ratio is roughly .3
             var maxRatio = 0.285f;
@@ -288,6 +289,9 @@ namespace Moetion.Face
             };
         }
 
+        /// <summary>
+        /// Calculate pupil location normalized to eye bounds
+        /// </summary>
         public static Vector2 CalcPupils(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
@@ -303,6 +307,34 @@ namespace Moetion.Face
             var pupilRight = PupilPos(list, Side.Right);
 
             return (pupilLeft + pupilRight) * .5f;
+        }
+
+        /// <summary>
+        /// Calculate brow raise
+        /// </summary>
+        public static float GetBrowRaise(NormalizedLandmarkList list, Side side)
+        {
+            var landmarks = list.Landmark;
+
+            var browPoints = side == Side.Right ? BrowRightPoints : BrowLeftPoints;
+            var browDistance = EyeLidRatio(
+                landmarks[browPoints[0]],
+                landmarks[browPoints[1]],
+                landmarks[browPoints[2]],
+                landmarks[browPoints[3]],
+                landmarks[browPoints[4]],
+                landmarks[browPoints[5]],
+                landmarks[browPoints[6]],
+                landmarks[browPoints[7]]
+            );
+
+            var maxBrowRatio = 1.15f;
+            var browHigh = .125f;
+            var browLow = .07f;
+            var browRatio = browDistance / maxBrowRatio - 1;
+            var browRaiseRatio = (Math.Clamp(browRatio, browLow, browHigh) - browLow) / (browHigh - browLow);
+
+            return browRaiseRatio;
         }
         #endregion
     }
