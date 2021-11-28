@@ -24,12 +24,38 @@ namespace Moetion.Face
         public static readonly int[] PupilLeftPoints = new int[] { 468, 469, 470, 471, 472 };
         public static readonly int[] PupilRightPoints = new int[] { 473, 474, 475, 476, 477 };
 
-        public static Face Solve(NormalizedLandmarkList list)
+        /// <summary>
+        /// Combines head, eye, pupil, and eyebrow calcs into one method to solve for the entire face.
+        /// </summary>
+        /// <remarks>
+        /// Here I chose the Mediapipe runtime values. We'll have to see if we want both runtimes.
+        /// </remarks>
+        public static Face Solve(
+            NormalizedLandmarkList list,
+            bool smoothBlink = false,
+            float blinkHigh = .35f, /* .85f if runtime is Tensorflow */
+            float blinkLow = .5f    /* .55f if runtime is Tensorflow */
+        )
         {
-            var landmarks = list.Landmark;
-            Face face = new();
+            var head = CalcHead(list);
+            var mouth = CalcMouth(list);
 
-            return face;
+            var eyes = CalcEyes(list, blinkHigh, blinkLow);
+
+            if (smoothBlink)
+                StabilizeBlink(ref eyes, head.Y);
+
+            var pupils = CalcPupils(list);
+            var brow = CalcBrow(list);
+
+            return new Face
+            {
+                Head = head,
+                Eyes = eyes,
+                Brow = brow,
+                Pupils = pupils,
+                Mouth = mouth,
+            };
         }
 
         #region Mouth Calculations
