@@ -3,6 +3,7 @@
 // Moetion is licensed under the BSD 3-Clause License. See LICENSE for details.
 
 using System;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
@@ -335,6 +336,19 @@ namespace Moetion.Face
             var browRaiseRatio = (Math.Clamp(browRatio, browLow, browHigh) - browLow) / (browHigh - browLow);
 
             return browRaiseRatio;
+        }
+
+        public static float CalcBrow(NormalizedLandmarkList list)
+        {
+            var landmarks = list.Landmark;
+
+            if (landmarks.Count != 478)
+                return 0;
+
+            var leftBrow = GetBrowRaise(list, Side.Left);
+            var rightBrow = GetBrowRaise(list, Side.Right);
+
+            return (leftBrow + rightBrow) / 2;
         }
         #endregion
     }
