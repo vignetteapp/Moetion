@@ -338,6 +338,9 @@ namespace Moetion.Face
             return browRaiseRatio;
         }
 
+        /// <summary>
+        /// Take the average of left and right eyebrow raise values
+        /// </summary>
         public static float CalcBrow(NormalizedLandmarkList list)
         {
             var landmarks = list.Landmark;
