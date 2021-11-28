@@ -13,6 +13,8 @@ namespace Moetion.Hands
         public Vector3 Rotation;
         public Vector3 Wrist;
 
+        // TODO: make a Finger struct with Proximal, Intermediate and Distal fields. Will be much more readable and easy to work with, probably.
+
         #region Thumb
 
         public Vector3 ThumbProximal;
