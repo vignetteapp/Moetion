@@ -3,12 +3,14 @@
 // Moetion is licensed under the BSD 3-Clause License. See LICENSE for details.
 
 using System;
+using System.Net.Security;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using Akihabara.Framework.Protobuf;
+using Google.Protobuf;
 using Moetion.Extensions;
-using static Moetion.Extensions.VectorExtensions;
 using static Moetion.Extensions.NumberExtensions;
+using static Moetion.Extensions.VectorExtensions;
 
 namespace Moetion.Face
 {
@@ -259,6 +261,48 @@ namespace Moetion.Face
                 eyes.Left = value;
                 eyes.Right = value;
             }
+        }
+
+        /// <summary>
+        /// Calculate eyes.
+        /// </summary>
+        public static Eyes CalcEyes(NormalizedLandmarkList list, float high = .85f, float low = .55f)
+        {
+            var landmarks = list.Landmark;
+
+            // Return early if no iris tracking
+            if (landmarks.Count != 478)
+            {
+                return new Eyes
+                {
+                    Left = 1,
+                    Right = 1,
+                };
+            }
+
+            // Open [0, 1]
+            return new Eyes
+            {
+                Left = GetEyeOpen(list, Side.Left, high, low),
+                Right = GetEyeOpen(list, Side.Right, high, low),
+            };
+        }
+
+        public static Vector2 CalcPupils(NormalizedLandmarkList list)
+        {
+            var landmarks = list.Landmark;
+
+            // Pupil (x: [-1, 1], y: [-1, 1])
+            if (landmarks.Count != 478)
+            {
+                return new Vector2(0, 0);
+            }
+
+            // Track pupils using left eye
+            var pupilLeft = PupilPos(list, Side.Left);
+            var pupilRight = PupilPos(list, Side.Right);
+
+            return (pupilLeft + pupilRight) * .5f;
         }
         #endregion
     }
