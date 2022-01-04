@@ -3,12 +3,8 @@
 // Moetion is licensed under the BSD 3-Clause License. See LICENSE for details.
 
 using System;
-using System.Net.Http.Headers;
-using System.Net.Security;
 using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
 using Akihabara.Framework.Protobuf;
-using Google.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.NumberExtensions;
 using static Moetion.Extensions.VectorExtensions;

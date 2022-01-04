@@ -3,7 +3,6 @@
 // Moetion is licensed under the BSD 3-Clause License. See LICENSE for details.
 
 using System.Numerics;
-using System.Reflection.Metadata;
 
 namespace Moetion.Face
 {

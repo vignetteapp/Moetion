@@ -5,7 +5,6 @@
 using System;
 using System.Numerics;
 using Akihabara.Framework.Protobuf;
-using Google.Protobuf.Collections;
 using Moetion.Extensions;
 using static Moetion.Extensions.VectorExtensions;
 
