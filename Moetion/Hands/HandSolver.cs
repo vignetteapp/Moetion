@@ -33,25 +33,25 @@ namespace Moetion.Hands
 
             hand.Wrist = new Vector3(hand.Rotation.X, hand.Rotation.Y, hand.Rotation.Z);
 
-            hand.RingProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 13, 14));
-            hand.RingIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(13, 14, 15));
-            hand.RingDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(14, 15, 16));
+            hand.Ring.Proximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 13, 14));
+            hand.Ring.Intermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(13, 14, 15));
+            hand.Ring.Distal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(14, 15, 16));
 
-            hand.IndexProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 5, 6));
-            hand.IndexIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(5, 6, 7));
-            hand.IndexDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(6, 7, 8));
+            hand.Index.Proximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 5, 6));
+            hand.Index.Intermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(5, 6, 7));
+            hand.Index.Distal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(6, 7, 8));
 
-            hand.MiddleProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 9, 10));
-            hand.MiddleIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(9, 10, 11));
-            hand.MiddleDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(10, 11, 12));
+            hand.Middle.Proximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 9, 10));
+            hand.Middle.Intermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(9, 10, 11));
+            hand.Middle.Distal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(10, 11, 12));
 
-            hand.ThumbProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 1, 2));
-            hand.ThumbIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(1, 2, 3));
-            hand.ThumbDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(2, 3, 4));
+            hand.Thumb.Proximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 1, 2));
+            hand.Thumb.Intermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(1, 2, 3));
+            hand.Thumb.Distal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(2, 3, 4));
 
-            hand.LittleProximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 17, 18));
-            hand.LittleIntermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(17, 18, 19));
-            hand.LittleDistal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(18, 19, 20));
+            hand.Little.Proximal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(0, 17, 18));
+            hand.Little.Intermediate = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(17, 18, 19));
+            hand.Little.Distal = new Vector3(0, 0, landmarks.AngleBetweenLandmarks(18, 19, 20));
 
             rigFingers(ref hand, side);
 
@@ -89,7 +89,7 @@ namespace Moetion.Hands
                     ),
                 };
 
-                hand.ThumbProximal = newThumbProximal;
+                hand.Thumb.Proximal = newThumbProximal;
                 #endregion
             }
             {
@@ -104,7 +104,7 @@ namespace Moetion.Hands
                     Z = Math.Clamp(startPos.Z + hand.ThumbIntermediate.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
                 };
 
-                hand.ThumbIntermediate = newThumbIntermediate;
+                hand.Thumb.Intermediate = newThumbIntermediate;
                 #endregion
             }
             {
@@ -119,7 +119,7 @@ namespace Moetion.Hands
                     Z = Math.Clamp(startPos.Z + hand.ThumbDistal.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
                 };
 
-                hand.ThumbDistal = newThumbDistal;
+                hand.Thumb.Distal = newThumbDistal;
                 #endregion
             }
             #endregion
