@@ -76,15 +76,15 @@ namespace Moetion.Hands
                 var newThumbProximal = new Vector3
                 {
                     X = Math.Clamp(
-                        startPos.X + hand.ThumbProximal.Z * -MathF.PI * dampener.X,
+                        startPos.X + hand.Thumb.Proximal.Z * -MathF.PI * dampener.X,
                         -.6f, .3f
                     ),
                     Y = Math.Clamp(
-                        startPos.Y + hand.ThumbProximal.Z * -MathF.PI * dampener.Y * sideFactor,
+                        startPos.Y + hand.Thumb.Proximal.Z * -MathF.PI * dampener.Y * sideFactor,
                         isRight ? -1 : -.3f, isRight ? .3f : 1
                     ),
                     Z = Math.Clamp(
-                        startPos.Z + hand.ThumbProximal.Z * -MathF.PI * dampener.Z * sideFactor,
+                        startPos.Z + hand.Thumb.Proximal.Z * -MathF.PI * dampener.Z * sideFactor,
                         isRight ? -.6f : -.3f, isRight ? .3f : .6f
                     ),
                 };
@@ -99,9 +99,9 @@ namespace Moetion.Hands
 
                 var newThumbIntermediate = new Vector3
                 {
-                    X = Math.Clamp(startPos.X + hand.ThumbIntermediate.Z * MathF.PI * dampener.X, -2, 2),
-                    Y = Math.Clamp(startPos.Y + hand.ThumbIntermediate.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
-                    Z = Math.Clamp(startPos.Z + hand.ThumbIntermediate.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
+                    X = Math.Clamp(startPos.X + hand.Thumb.Intermediate.Z * MathF.PI * dampener.X, -2, 2),
+                    Y = Math.Clamp(startPos.Y + hand.Thumb.Intermediate.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
+                    Z = Math.Clamp(startPos.Z + hand.Thumb.Intermediate.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
                 };
 
                 hand.Thumb.Intermediate = newThumbIntermediate;
@@ -114,9 +114,9 @@ namespace Moetion.Hands
 
                 var newThumbDistal = new Vector3
                 {
-                    X = Math.Clamp(startPos.X + hand.ThumbDistal.Z * MathF.PI * dampener.X, -2, 2),
-                    Y = Math.Clamp(startPos.Y + hand.ThumbDistal.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
-                    Z = Math.Clamp(startPos.Z + hand.ThumbDistal.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
+                    X = Math.Clamp(startPos.X + hand.Thumb.Distal.Z * MathF.PI * dampener.X, -2, 2),
+                    Y = Math.Clamp(startPos.Y + hand.Thumb.Distal.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
+                    Z = Math.Clamp(startPos.Z + hand.Thumb.Distal.Z * MathF.PI * dampener.Z * sideFactor, -2, 2),
                 };
 
                 hand.Thumb.Distal = newThumbDistal;
@@ -124,18 +124,18 @@ namespace Moetion.Hands
             }
             #endregion
 
-            rigOtherFingerSegment(ref hand.IndexProximal, side);
-            rigOtherFingerSegment(ref hand.IndexIntermediate, side);
-            rigOtherFingerSegment(ref hand.IndexDistal, side);
-            rigOtherFingerSegment(ref hand.MiddleProximal, side);
-            rigOtherFingerSegment(ref hand.MiddleIntermediate, side);
-            rigOtherFingerSegment(ref hand.MiddleDistal, side);
-            rigOtherFingerSegment(ref hand.RingProximal, side);
-            rigOtherFingerSegment(ref hand.RingIntermediate, side);
-            rigOtherFingerSegment(ref hand.RingDistal, side);
-            rigOtherFingerSegment(ref hand.LittleProximal, side);
-            rigOtherFingerSegment(ref hand.LittleIntermediate, side);
-            rigOtherFingerSegment(ref hand.LittleDistal, side);
+            rigOtherFingerSegment(ref hand.Index.Proximal, side);
+            rigOtherFingerSegment(ref hand.Index.Intermediate, side);
+            rigOtherFingerSegment(ref hand.Index.Distal, side);
+            rigOtherFingerSegment(ref hand.Middle.Proximal, side);
+            rigOtherFingerSegment(ref hand.Middle.Intermediate, side);
+            rigOtherFingerSegment(ref hand.Middle.Distal, side);
+            rigOtherFingerSegment(ref hand.Ring.Proximal, side);
+            rigOtherFingerSegment(ref hand.Ring.Intermediate, side);
+            rigOtherFingerSegment(ref hand.Ring.Distal, side);
+            rigOtherFingerSegment(ref hand.Little.Proximal, side);
+            rigOtherFingerSegment(ref hand.Little.Intermediate, side);
+            rigOtherFingerSegment(ref hand.Little.Distal, side);
         }
 
         private static void rigOtherFingerSegment(ref Vector3 segment, Side side)
