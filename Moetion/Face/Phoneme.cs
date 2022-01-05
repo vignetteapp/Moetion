@@ -7,7 +7,7 @@ namespace Moetion.Face
     /// <summary>
     /// The vowel shape that a <see cref="Mouth"/> is doing.
     /// </summary>
-    public struct MouthShape
+    public struct Phoneme
     {
         /// <summary>
         /// How much the mouth tends to an 'A' shape.
