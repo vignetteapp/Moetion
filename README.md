@@ -14,4 +14,4 @@ This list is non-exhaustive however, but the list of changes we're doing makes i
 
 ## Copyright
 
-Moetion is Copyright &copy; The Vignette Authors, licensed under the [Microsoft Reciprocal License](https://opensource.org/licenses/MS-RL). See the LICENSE file for more details.
+Moetion is Copyright &copy; The Vignette Authors, licensed under the [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause). See the LICENSE file for more details.
