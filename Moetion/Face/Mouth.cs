@@ -17,6 +17,6 @@ namespace Moetion.Face
         /// <summary>
         /// The vowel shape that the mouth is doing.
         /// </summary>
-        public MouthShape Shape;
+        public Phoneme Shape;
     }
 }

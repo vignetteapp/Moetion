@@ -103,7 +103,7 @@ namespace Moetion.Face
             {
                 X = ratioX,
                 Y = ratioY,
-                Shape = new MouthShape
+                Shape = new Phoneme
                 {
                     A = ratioA,
                     I = ratioI,
