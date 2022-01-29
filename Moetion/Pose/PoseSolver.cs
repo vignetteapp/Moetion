@@ -16,7 +16,6 @@ namespace Moetion.Pose
         {
             (Arm leftArm, Arm rightArm) = calcArms(list);
             (Hips hips, Vector3 spine) = calcHips(list);
-
             var landmarks = list.Landmark;
 
             // Detect offscreen and reset values to defaults
@@ -64,7 +63,6 @@ namespace Moetion.Pose
                 leftLeg.Lower *= rightFootOffscreen ? 0 : 1;
                 rightLeg.Upper *= leftFootOffscreen ? 0 : 1;
                 rightLeg.Lower *= leftFootOffscreen ? 0 : 1;
-
                 pose.LeftLeg = leftLeg;
                 pose.RightLeg = rightLeg;
             }
