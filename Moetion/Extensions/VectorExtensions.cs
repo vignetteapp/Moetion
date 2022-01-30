@@ -16,12 +16,34 @@ namespace Moetion.Extensions
             return MathF.Atan2(dy, dx);
         }
 
+        public static Vector3 FindRotation(this Vector3 vector, Vector3 other, bool normalize = true)
+        {
+            var result = new Vector3
+            {
+                X = Find2DAngle(vector.Z, vector.X, other.Z, other.X),
+                Y = Find2DAngle(vector.Z, vector.Y, other.Z, other.Y),
+                Z = Find2DAngle(vector.X, vector.Y, other.X, other.Y),
+            };
+
+            if (normalize)
+            {
+                return new Vector3
+                {
+                    X = result.X.NormalizeRadians(),
+                    Y = result.Y.NormalizeRadians(),
+                    Z = result.Z.NormalizeRadians(),
+                };
+            }
+
+            return result;
+        }
+
         public static Vector2 Unit(this Vector2 vector) => vector / vector.Length();
         public static Vector3 Unit(this Vector3 vector) => vector / vector.Length();
 
         public static Vector2 ToVector2(this Vector3 vector) => new Vector2 { X = vector.X, Y = vector.Y };
 
-        public static Vector3 RollPitchYaw(Vector3 a, Vector3 b, Vector3? c)
+        public static Vector3 RollPitchYaw(Vector3 a, Vector3 b, Vector3? c = null)
         {
             if (c == null)
             {
