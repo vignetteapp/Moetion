@@ -4,7 +4,7 @@
 
 using System;
 using System.Numerics;
-using Akihabara.Framework.Protobuf;
+using Mediapipe.Net.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.NumberExtensions;
 using static Moetion.Extensions.VectorExtensions;
@@ -106,10 +106,10 @@ namespace Moetion.Face
                 Shape = new Phoneme
                 {
                     A = ratioA,
-                    I = ratioI,
-                    U = ratioU,
                     E = ratioE,
+                    I = ratioI,
                     O = ratioO,
+                    U = ratioU,
                 },
             };
         }

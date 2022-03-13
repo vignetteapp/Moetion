@@ -3,7 +3,7 @@
 // Moetion is licensed under the BSD 3-Clause License. See LICENSE for details.
 
 using System.Numerics;
-using Akihabara.Framework.Protobuf;
+using Mediapipe.Net.Framework.Protobuf;
 using Google.Protobuf.Collections;
 
 namespace Moetion.Extensions

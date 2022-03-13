@@ -4,7 +4,7 @@
 
 using System;
 using System.Numerics;
-using Akihabara.Framework.Protobuf;
+using Mediapipe.Net.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.VectorExtensions;
 
