@@ -4,12 +4,11 @@
 
 using System.Numerics;
 
-namespace Moetion.Hands
+namespace Moetion.Hands;
+
+public struct Finger
 {
-    public struct Finger
-    {
-        public Vector3 Proximal;
-        public Vector3 Intermediate;
-        public Vector3 Distal;
-    }
+    public Vector3 Proximal;
+    public Vector3 Intermediate;
+    public Vector3 Distal;
 }

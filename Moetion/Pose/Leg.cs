@@ -4,11 +4,10 @@
 
 using System.Numerics;
 
-namespace Moetion.Pose
+namespace Moetion.Pose;
+
+public struct Leg
 {
-    public struct Leg
-    {
-        public Vector3 Upper;
-        public Vector3 Lower;
-    }
+    public Vector3 Upper;
+    public Vector3 Lower;
 }

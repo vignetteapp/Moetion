@@ -6,9 +6,8 @@ using System.Numerics;
 using Moetion.Extensions;
 using NUnit.Framework;
 
-namespace Moetion.Tests.Extensions
+namespace Moetion.Tests.Extensions;
+
+public class VectorExtensionsTests
 {
-    public class VectorExtensionsTests
-    {
-    }
 }

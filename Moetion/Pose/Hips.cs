@@ -4,12 +4,11 @@
 
 using System.Numerics;
 
-namespace Moetion.Pose
+namespace Moetion.Pose;
+
+public struct Hips
 {
-    public struct Hips
-    {
-        public Vector3 WorldPosition;
-        public Vector3 Position;
-        public Vector3 Rotation;
-    }
+    public Vector3 WorldPosition;
+    public Vector3 Position;
+    public Vector3 Rotation;
 }
