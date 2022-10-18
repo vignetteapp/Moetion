@@ -4,21 +4,20 @@
 
 using System.Numerics;
 
-namespace Moetion.Hands
-{
-    public struct Hand
-    {
-        public Vector3[] Palm;
-        // TODO: convert to Quaternion
-        public Vector3 Rotation;
-        public Vector3 Wrist;
+namespace Moetion.Hands;
 
-        #region Fingers
-        public Finger Thumb;
-        public Finger Index;
-        public Finger Middle;
-        public Finger Ring;
-        public Finger Little;
-        #endregion
-    }
+public struct Hand
+{
+    public Vector3[] Palm;
+    // TODO: convert to Quaternion
+    public Vector3 Rotation;
+    public Vector3 Wrist;
+
+    #region Fingers
+    public Finger Thumb;
+    public Finger Index;
+    public Finger Middle;
+    public Finger Ring;
+    public Finger Little;
+    #endregion
 }

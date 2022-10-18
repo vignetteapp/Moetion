@@ -4,15 +4,14 @@
 
 using System.Numerics;
 
-namespace Moetion.Pose
+namespace Moetion.Pose;
+
+public struct Pose
 {
-    public struct Pose
-    {
-        public Arm LeftArm;
-        public Arm RightArm;
-        public Leg LeftLeg;
-        public Leg RightLeg;
-        public Vector3 Spine;
-        public Hips Hips;
-    }
+    public Arm LeftArm;
+    public Arm RightArm;
+    public Leg LeftLeg;
+    public Leg RightLeg;
+    public Vector3 Spine;
+    public Hips Hips;
 }
