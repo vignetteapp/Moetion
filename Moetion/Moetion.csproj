@@ -13,7 +13,7 @@
      <Authors>Vignette</Authors>
      <PackageTags>Tracking;Solver</PackageTags>
      <Title>Moetion</Title>
-     <Description>Pure .NET bindings for MediaPipe</Description>
+     <Description>A solver library for tracking solutions.</Description>
      <Copyright>2022 Vignette</Copyright>
      <PackageProjectUrl>https://github.com/vignetteapp/Moetion</PackageProjectUrl>
      <PackageLicenseFile>LICENSE</PackageLicenseFile>

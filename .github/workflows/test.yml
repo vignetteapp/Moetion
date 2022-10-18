@@ -35,10 +35,10 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build <PROJECT>
+      - name: Build Project
         run: dotnet build ${{ env.PROJECT_NAME }} -r ${{ matrix.os.runtime }} --self-contained
 
-      - name: Test <PROJECT>
+      - name: Test Project
         run: dotnet test ${{ env.TEST_PROJECT_NAME }} -r ${{ matrix.os.runtime }} --logger "trx;LogFileName=TestResults-${{ matrix.os.name }}.trx"
 
       - name: Upload test artifact
