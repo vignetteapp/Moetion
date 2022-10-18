@@ -1,0 +1,49 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+    tags-ignore:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+
+env:
+  PROJECT_NAME: <PROJECT_NAME>
+  TEST_PROJECT_NAME: <PROJECT_NAME>.Tests
+
+jobs:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - { name: Windows, runner: windows-latest, runtime: win-x64 }
+          - { name: MacOS, runner: macos-latest, runtime: osx-x64 }
+          - { name: Linux, runner: ubuntu-latest, runtime: linux-x64 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Build <PROJECT>
+        run: dotnet build ${{ env.PROJECT_NAME }} -r ${{ matrix.os.runtime }} --self-contained
+
+      - name: Test <PROJECT>
+        run: dotnet test ${{ env.TEST_PROJECT_NAME }} -r ${{ matrix.os.runtime }} --logger "trx;LogFileName=TestResults-${{ matrix.os.name }}.trx"
+
+      - name: Upload test artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: TestResults-${{ matrix.os.name }}
+          path: ${{ matrix.os.runtime }}/*.trx
