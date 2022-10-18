@@ -6,8 +6,24 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+   <PropertyGroup Label="Nuget">
+     <IsPackable>true</IsPackable>
+     <PackageId>Moetion</PackageId>
+     <Version>1.0.0</Version>
+     <Authors>Vignette</Authors>
+     <PackageTags>Tracking;Solver</PackageTags>
+     <Title>Moetion</Title>
+     <Description>Pure .NET bindings for MediaPipe</Description>
+     <Copyright>2022 Vignette</Copyright>
+     <PackageProjectUrl>https://github.com/vignetteapp/Moetion</PackageProjectUrl>
+     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+   </PropertyGroup>
+
     <ItemGroup>
       <PackageReference Include="Mediapipe.Net" Version="0.8.10" />
     </ItemGroup>
 
+   <ItemGroup Label="Documents">
+     <None Include="..\LICENSE" Pack="true" PackagePath="" />
+   </ItemGroup>
 </Project>
