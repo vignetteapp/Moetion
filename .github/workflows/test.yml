@@ -12,8 +12,8 @@ on:
       - '*'
 
 env:
-  PROJECT_NAME: <PROJECT_NAME>
-  TEST_PROJECT_NAME: <PROJECT_NAME>.Tests
+  PROJECT_NAME: Moetion
+  TEST_PROJECT_NAME: Moetion.Tests
 
 jobs:
   test:
