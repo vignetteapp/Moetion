@@ -4,8 +4,10 @@
 
 using System;
 using System.Numerics;
+using Google.Protobuf.Collections;
 using Mediapipe.Net.Framework.Protobuf;
 using Moetion.Extensions;
+using static Moetion.Extensions.MediapipeExtensions;
 using static Moetion.Extensions.VectorExtensions;
 
 namespace Moetion.Pose;
@@ -16,7 +18,7 @@ public static class PoseSolver
     {
         (Arm leftArm, Arm rightArm) = calcArms(list);
         (Hips hips, Vector3 spine) = calcHips(list);
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Detect offscreen and reset values to defaults
         bool rightHandOffscreen = landmarks[15].ToVector().Y > -.1f
@@ -45,7 +47,7 @@ public static class PoseSolver
         if (rightFootOffscreen)
             rightArm.Lower *= 0;
 
-        var pose = new Pose
+        Pose pose = new Pose
         {
             Hips = hips,
             LeftArm = leftArm,
@@ -72,20 +74,20 @@ public static class PoseSolver
 
     private static (Arm, Arm) calcArms(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var rightArm = new Arm();
-        var leftArm = new Arm();
+        Arm rightArm = new Arm();
+        Arm leftArm = new Arm();
 
-        rightArm.Upper = landmarks[11].ToVector().FindRotation(landmarks[13].ToVector());
-        leftArm.Upper = landmarks[12].ToVector().FindRotation(landmarks[14].ToVector());
-        rightArm.Upper.Y = AngleBetween3DCoords(landmarks[12].ToVector(), landmarks[11].ToVector(), landmarks[13].ToVector());
-        leftArm.Upper.Y = AngleBetween3DCoords(landmarks[11].ToVector(), landmarks[12].ToVector(), landmarks[14].ToVector());
+        rightArm.Upper = landmarks[11].FindRotation(landmarks[13]);
+        leftArm.Upper = landmarks[12].FindRotation(landmarks[14]);
+        rightArm.Upper.Y = landmarks.AngleBetweenLandmarks(12, 11, 13);
+        leftArm.Upper.Y = landmarks.AngleBetweenLandmarks(11, 12, 14);
 
-        rightArm.Lower = landmarks[13].ToVector().FindRotation(landmarks[15].ToVector());
-        leftArm.Lower = landmarks[14].ToVector().FindRotation(landmarks[16].ToVector());
-        rightArm.Lower.Y = AngleBetween3DCoords(landmarks[11].ToVector(), landmarks[13].ToVector(), landmarks[15].ToVector());
-        leftArm.Lower.Y = AngleBetween3DCoords(landmarks[12].ToVector(), landmarks[14].ToVector(), landmarks[16].ToVector());
+        rightArm.Lower = landmarks[13].FindRotation(landmarks[15]);
+        leftArm.Lower = landmarks[14].FindRotation(landmarks[16]);
+        rightArm.Lower.Y = landmarks.AngleBetweenLandmarks(11, 13, 15);
+        leftArm.Lower.Y = landmarks.AngleBetweenLandmarks(12, 14, 16);
         rightArm.Lower.Z = Math.Clamp(rightArm.Lower.Z, -2.14f, 0f);
         leftArm.Lower.Z = Math.Clamp(leftArm.Lower.Z, -2.14f, 0f);
 
@@ -129,7 +131,7 @@ public static class PoseSolver
 
     private static (Hips, Vector3) calcHips(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Find 2D normalized hip and shoulder joint positions / distances
         Vector2 hipLeft2d = landmarks[23].ToVector2();
@@ -142,7 +144,7 @@ public static class PoseSolver
         Vector2 shoulderCenter2d = Vector2.Lerp(shoulderLeft2d, shoulderRight2d, 1);
         float spineLength = Vector2.Distance(hipCenter2d, shoulderCenter2d);
 
-        var hips = new Hips
+        Hips hips = new Hips
         {
             Position = new Vector3
             {
@@ -151,7 +153,7 @@ public static class PoseSolver
                 Y = 0,
                 Z = Math.Clamp(spineLength - 1, -2, 0),
             },
-            Rotation = RollPitchYaw(landmarks[23].ToVector(), landmarks[24].ToVector()),
+            Rotation = landmarks.RollPitchYaw(23, 24),
         };
 
         // Fix -PI, PI jumping
@@ -160,7 +162,7 @@ public static class PoseSolver
 
         hips.Rotation.Y += .5f;
 
-        //Stop jumping between left and right shoulder tilt
+        // Stop jumping between left and right shoulder tilt
         if (hips.Rotation.Z > 0)
             hips.Rotation.Z = 1 - hips.Rotation.Z;
 
@@ -171,9 +173,9 @@ public static class PoseSolver
         hips.Rotation.Z *= 1 - turnAroundAmountHips;
         hips.Rotation.X = 0; // Temp fix for inaccurate X axis
 
-        Vector3 spine = RollPitchYaw(landmarks[11].ToVector(), landmarks[12].ToVector());
+        Vector3 spine = landmarks.RollPitchYaw(11, 12);
 
-        //fix -PI, PI jumping
+        // fix -PI, PI jumping
         if (spine.Y > .5f)
             spine.Y -= 2;
 
@@ -213,35 +215,29 @@ public static class PoseSolver
     // NOTE: Legs are a WIP on the Kalidokit side.
     private static (Leg, Leg) calcLegs(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var leftLeg = new Leg
+        Leg leftLeg = new Leg
         {
-            Upper = landmarks[24].ToVector().FindRotation(landmarks[26].ToVector()),
-            Lower = landmarks[26].ToVector().FindRotation(landmarks[28].ToVector()),
+            Upper = landmarks[24].FindRotation(landmarks[26]),
+            Lower = landmarks[26].FindRotation(landmarks[28]),
         };
-        var rightLeg = new Leg
+        Leg rightLeg = new Leg
         {
-            Upper = landmarks[23].ToVector().FindRotation(landmarks[25].ToVector()),
-            Lower = landmarks[25].ToVector().FindRotation(landmarks[27].ToVector()),
+            Upper = landmarks[23].FindRotation(landmarks[25]),
+            Lower = landmarks[25].FindRotation(landmarks[27]),
         };
 
         // Recenter
         leftLeg.Upper.Z = Math.Clamp(leftLeg.Upper.Z - .5f, -.5f, 0);
         leftLeg.Upper.Y = 0; // Y axis is not correct
-        leftLeg.Lower.X = AngleBetween3DCoords(
-            landmarks[24].ToVector(),
-            landmarks[26].ToVector(),
-            landmarks[28].ToVector());
+        leftLeg.Lower.X = landmarks.AngleBetweenLandmarks(24, 26, 28);
         leftLeg.Lower.Y = 0; // Y axis not correct
         leftLeg.Lower.Z = 0; // Z axis not correct
 
         rightLeg.Upper.Z = Math.Clamp(rightLeg.Upper.Z - .5f, -.5f, 0);
         rightLeg.Upper.Y = 0; // Y axis is not correct
-        rightLeg.Lower.X = AngleBetween3DCoords(
-            landmarks[23].ToVector(),
-            landmarks[25].ToVector(),
-            landmarks[27].ToVector());
+        rightLeg.Lower.X = landmarks.AngleBetweenLandmarks(23, 25, 27);
         rightLeg.Lower.Y = 0; // Y axis not correct
         rightLeg.Lower.Z = 0; // Z axis not correct
 

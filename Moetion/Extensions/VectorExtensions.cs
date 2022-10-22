@@ -11,14 +11,14 @@ public static class VectorExtensions
 {
     public static float Find2DAngle(float cx, float cy, float ex, float ey)
     {
-        var dy = ey - cy;
-        var dx = ex - cx;
+        float dy = ey - cy;
+        float dx = ex - cx;
         return MathF.Atan2(dy, dx);
     }
 
     public static Vector3 FindRotation(this Vector3 vector, Vector3 other, bool normalize = true)
     {
-        var result = new Vector3
+        Vector3 result = new Vector3
         {
             X = Find2DAngle(vector.Z, vector.X, other.Z, other.X),
             Y = Find2DAngle(vector.Z, vector.Y, other.Z, other.Y),
@@ -55,17 +55,17 @@ public static class VectorExtensions
             };
         }
 
-        var qb = b - a;
-        var qc = (Vector3)(c - a);
-        var n = Vector3.Cross(qb, qc);
+        Vector3 qb = b - a;
+        Vector3 qc = (Vector3)(c - a);
+        Vector3 n = Vector3.Cross(qb, qc);
 
-        var unitZ = n.Unit();
-        var unitX = qb.Unit();
-        var unitY = Vector3.Cross(unitZ, unitX);
+        Vector3 unitZ = n.Unit();
+        Vector3 unitX = qb.Unit();
+        Vector3 unitY = Vector3.Cross(unitZ, unitX);
 
-        var beta = MathF.Asin(unitZ.X);
-        var alpha = MathF.Atan2(-unitZ.Y, unitZ.Z);
-        var gamma = MathF.Atan2(-unitY.X, unitX.X);
+        float beta = MathF.Asin(unitZ.X);
+        float alpha = MathF.Atan2(-unitZ.Y, unitZ.Z);
+        float gamma = MathF.Atan2(-unitY.X, unitX.X);
 
         return new Vector3
         {
@@ -81,14 +81,14 @@ public static class VectorExtensions
     /// <returns>Single angle normalized to 0, 1.</returns>
     public static float AngleBetween3DCoords(Vector3 a, Vector3 b, Vector3 c)
     {
-        var v1 = a - b;
-        var v2 = c - b;
+        Vector3 v1 = a - b;
+        Vector3 v2 = c - b;
 
-        var v1Norm = v1.Unit();
-        var v2Norm = v2.Unit();
+        Vector3 v1Norm = v1.Unit();
+        Vector3 v2Norm = v2.Unit();
 
-        var dotProducts = Vector3.Dot(v1Norm, v2Norm);
-        var angle = MathF.Acos(dotProducts);
+        float dotProducts = Vector3.Dot(v1Norm, v2Norm);
+        float angle = MathF.Acos(dotProducts);
 
         return angle.NormalizeRadians();
     }

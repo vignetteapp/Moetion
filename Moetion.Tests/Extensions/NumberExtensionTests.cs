@@ -13,26 +13,26 @@ public class NumberExtensionTests
     [Test]
     public void RemapTest0()
     {
-        //get random float between 0 and 1
+        // get random float between 0 and 1
         float number = Random.Shared.NextSingle();
 
-        //remap it between 0 and 1
+        // remap it between 0 and 1
         float remapped = number.Remap(0f, 1f);
 
-        //it should be the same
+        // it should be the same
         Assert.AreEqual(number, remapped);
     }
 
     [Test]
     public void RemapTest1()
     {
-        //get random float between -10 and 10
+        // get random float between -10 and 10
         float number = 10f / Random.Shared.Next(-1000000, 1000000);
 
-        //remap it between -1 and 1
+        // remap it between -1 and 1
         float remapped = number.Remap(-1f, 1f);
 
-        //it should be >= -1 and <= 1
+        // it should be >= -1 and <= 1
         Assert.GreaterOrEqual(remapped, -1f);
         Assert.LessOrEqual(remapped, 1f);
     }
@@ -40,16 +40,16 @@ public class NumberExtensionTests
     [Test]
     public void NormalizeAngleTest()
     {
-        //get random float between -1 and 1
+        // get random float between -1 and 1
         float angle = 1f / Random.Shared.Next(-100000, 100000);
 
-        //normalize it
+        // normalize it
         float normalized = angle.NormalizeAngle();
 
-        //multiply it by PI because trigonometry
+        // multiply it by PI because trigonometry
         normalized *= MathF.PI;
 
-        //since it was already normalized nothing should happen (account for precision loss)
+        // since it was already normalized nothing should happen (account for precision loss)
         Assert.Less(Math.Abs(angle - normalized), 0.0001);
     }
 }

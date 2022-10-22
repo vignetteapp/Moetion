@@ -20,8 +20,8 @@ public static class NumberExtensions
     /// <returns>Normalized values to -1, 1.</returns>
     public static float NormalizeAngle(this float radians)
     {
-        var twoPi = MathF.PI * 2;
-        var angle = radians % twoPi;
+        float twoPi = MathF.PI * 2;
+        float angle = radians % twoPi;
         angle = angle > MathF.PI ? angle - twoPi : angle < -MathF.PI ? twoPi + angle : angle;
         return angle / MathF.PI;
     }
