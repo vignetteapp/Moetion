@@ -4,6 +4,7 @@
 
 using System;
 using System.Numerics;
+using Google.Protobuf.Collections;
 using Mediapipe.Net.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.NumberExtensions;
@@ -33,16 +34,16 @@ public static class FaceSolver
         float blinkLow = .5f    /* .55f if runtime is Tensorflow */
     )
     {
-        var head = CalcHead(list);
-        var mouth = CalcMouth(list);
+        Head head = CalcHead(list);
+        Mouth mouth = CalcMouth(list);
 
-        var eyes = CalcEyes(list, blinkHigh, blinkLow);
+        Eyes eyes = CalcEyes(list, blinkHigh, blinkLow);
 
         if (smoothBlink)
             StabilizeBlink(ref eyes, head.Y);
 
-        var pupils = CalcPupils(list);
-        var brow = CalcBrow(list);
+        Vector2 pupils = CalcPupils(list);
+        float brow = CalcBrow(list);
 
         return new Face
         {
@@ -57,31 +58,31 @@ public static class FaceSolver
     #region Mouth Calculations
     public static Mouth CalcMouth(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Eye keypoints
-        var eyeInnerCornerL = landmarks[133].ToVector();
-        var eyeInnerCornerR = landmarks[362].ToVector();
-        var eyeOuterCornerL = landmarks[130].ToVector();
-        var eyeOuterCornerR = landmarks[263].ToVector();
+        Vector3 eyeInnerCornerL = landmarks[133].ToVector();
+        Vector3 eyeInnerCornerR = landmarks[362].ToVector();
+        Vector3 eyeOuterCornerL = landmarks[130].ToVector();
+        Vector3 eyeOuterCornerR = landmarks[263].ToVector();
 
         // Eye keypoint distances
-        var eyeInnerDistance = Vector3.Distance(eyeInnerCornerL, eyeInnerCornerR);
-        var eyeOuterDistance = Vector3.Distance(eyeOuterCornerL, eyeOuterCornerR);
+        float eyeInnerDistance = Vector3.Distance(eyeInnerCornerL, eyeInnerCornerR);
+        float eyeOuterDistance = Vector3.Distance(eyeOuterCornerL, eyeOuterCornerR);
 
         // Mouth keypoints
-        var upperInnerLip = landmarks[13].ToVector();
-        var lowerInnerLip = landmarks[14].ToVector();
-        var mouthCornerLeft = landmarks[61].ToVector();
-        var mouthCornerRight = landmarks[291].ToVector();
+        Vector3 upperInnerLip = landmarks[13].ToVector();
+        Vector3 lowerInnerLip = landmarks[14].ToVector();
+        Vector3 mouthCornerLeft = landmarks[61].ToVector();
+        Vector3 mouthCornerRight = landmarks[291].ToVector();
 
         // Mouth keypoint distances
-        var mouthOpen = Vector3.Distance(upperInnerLip, lowerInnerLip);
-        var mouthWidth = Vector3.Distance(mouthCornerLeft, mouthCornerRight);
+        float mouthOpen = Vector3.Distance(upperInnerLip, lowerInnerLip);
+        float mouthWidth = Vector3.Distance(mouthCornerLeft, mouthCornerRight);
 
         // Mouth open and mouth shape ratios
-        var ratioY = mouthOpen / eyeInnerDistance;
-        var ratioX = mouthWidth / eyeOuterDistance;
+        float ratioY = mouthOpen / eyeInnerDistance;
+        float ratioX = mouthWidth / eyeOuterDistance;
 
         // Normalize and scale mouth open
         ratioY = ratioY.Remap(0.15f, 0.7f);
@@ -90,14 +91,14 @@ public static class FaceSolver
         ratioX = ratioX.Remap(0.45f, 0.9f);
         ratioX = (ratioX - 0.3f) * 2;
 
-        var mouthX = ratioX;
-        var mouthY = (mouthOpen / eyeInnerDistance).Remap(0.17f, 0.5f);
+        float mouthX = ratioX;
+        float mouthY = (mouthOpen / eyeInnerDistance).Remap(0.17f, 0.5f);
 
-        var ratioI = Math.Clamp(mouthX.Remap(0, 1) * 2 * mouthY.Remap(0.2f, 0.7f), 0, 1);
-        var ratioA = mouthY * 0.4f + mouthY * (1 - ratioI) * 0.6f;
-        var ratioU = mouthY * (1 - ratioI).Remap(0, 0.3f) * 0.1f;
-        var ratioE = ratioU.Remap(0.2f, 1) * (1 - ratioI) * 0.3f;
-        var ratioO = (1 - ratioI) * mouthY.Remap(0.3f, 1) * 0.4f;
+        float ratioI = Math.Clamp(mouthX.Remap(0, 1) * 2 * mouthY.Remap(0.2f, 0.7f), 0, 1);
+        float ratioA = mouthY * 0.4f + mouthY * (1 - ratioI) * 0.6f;
+        float ratioU = mouthY * (1 - ratioI).Remap(0, 0.3f) * 0.1f;
+        float ratioE = ratioU.Remap(0.2f, 1) * (1 - ratioI) * 0.3f;
+        float ratioO = (1 - ratioI) * mouthY.Remap(0.3f, 1) * 0.4f;
 
         return new Mouth
         {
@@ -119,13 +120,13 @@ public static class FaceSolver
     public static Head CalcHead(NormalizedLandmarkList list)
     {
         // Find 3 vectors that form a plane to represent the head
-        var plane = FaceEulerPlane(list);
-        var rotate = RollPitchYaw(plane[0], plane[1], plane[2]);
+        Vector3[] plane = FaceEulerPlane(list);
+        Vector3 rotate = RollPitchYaw(plane[0], plane[1], plane[2]);
         // Find center of face detection box
-        var midPoint = Vector3.Lerp(plane[0], plane[1], 0.5f);
+        Vector3 midPoint = Vector3.Lerp(plane[0], plane[1], 0.5f);
         // Roughly find the dimensions of the face detection box
-        var width = Vector3.Distance(plane[0], plane[1]);
-        var height = Vector3.Distance(midPoint, plane[2]);
+        float width = Vector3.Distance(plane[0], plane[1]);
+        float height = Vector3.Distance(midPoint, plane[2]);
 
         // Flip
         rotate.X *= -1;
@@ -156,14 +157,14 @@ public static class FaceSolver
 
     public static Vector3[] FaceEulerPlane(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Create face detection square bounds
-        var topLeft = landmarks[21].ToVector();
-        var topRight = landmarks[251].ToVector();
-        var bottomRight = landmarks[397].ToVector();
-        var bottomLeft = landmarks[172].ToVector();
-        var bottomMidpoint = Vector3.Lerp(bottomRight, bottomLeft, 0.5f);
+        Vector3 topLeft = landmarks[21].ToVector();
+        Vector3 topRight = landmarks[251].ToVector();
+        Vector3 bottomRight = landmarks[397].ToVector();
+        Vector3 bottomLeft = landmarks[172].ToVector();
+        Vector3 bottomMidpoint = Vector3.Lerp(bottomRight, bottomLeft, 0.5f);
 
         // TODO: idk, this array processing looks ugly.
         return new Vector3[] { topLeft, topRight, bottomMidpoint };
@@ -173,10 +174,10 @@ public static class FaceSolver
     #region Eye Calculations
     public static float GetEyeOpen(NormalizedLandmarkList list, Side side, float high = .85f, float low = .55f)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var eyePoints = side == Side.Right ? EyeRightPoints : EyeLeftPoints;
-        var eyeDistance = EyeLidRatio(
+        int[] eyePoints = side == Side.Right ? EyeRightPoints : EyeLeftPoints;
+        float eyeDistance = EyeLidRatio(
             landmarks[eyePoints[0]],
             landmarks[eyePoints[1]],
             landmarks[eyePoints[2]],
@@ -188,11 +189,11 @@ public static class FaceSolver
         );
 
         // Human eye width to height ratio is roughly .3
-        var maxRatio = 0.285f;
+        float maxRatio = 0.285f;
         // Compare ratio against max ratio
-        var ratio = Math.Clamp(eyeDistance / maxRatio, 0, 2);
+        float ratio = Math.Clamp(eyeDistance / maxRatio, 0, 2);
         // Remap eye open and close ratios to increase sensitivity
-        var eyeOpenRatio = ratio.Remap(low, high);
+        float eyeOpenRatio = ratio.Remap(low, high);
 
         return eyeOpenRatio;
     }
@@ -207,24 +208,24 @@ public static class FaceSolver
         NormalizedLandmark midLowerLid,
         NormalizedLandmark innerLowerLid)
     {
-        var eyeOuterCorner = outerCorner.ToVector2();
-        var eyeInnerCorner = innerCorner.ToVector2();
+        Vector2 eyeOuterCorner = outerCorner.ToVector2();
+        Vector2 eyeInnerCorner = innerCorner.ToVector2();
 
-        var eyeOuterUpperLid = outerUpperLid.ToVector2();
-        var eyeMidUpperLid = midUpperLid.ToVector2();
-        var eyeInnerUpperLid = innerUpperLid.ToVector2();
+        Vector2 eyeOuterUpperLid = outerUpperLid.ToVector2();
+        Vector2 eyeMidUpperLid = midUpperLid.ToVector2();
+        Vector2 eyeInnerUpperLid = innerUpperLid.ToVector2();
 
-        var eyeOuterLowerLid = outerLowerLid.ToVector2();
-        var eyeMidLowerLid = midLowerLid.ToVector2();
-        var eyeInnerLowerLid = innerLowerLid.ToVector2();
+        Vector2 eyeOuterLowerLid = outerLowerLid.ToVector2();
+        Vector2 eyeMidLowerLid = midLowerLid.ToVector2();
+        Vector2 eyeInnerLowerLid = innerLowerLid.ToVector2();
 
         // Use 2D Distances instead of 3D for less jitter
-        var eyeWidth = Vector2.Distance(eyeOuterCorner, eyeInnerCorner);
-        var eyeOuterLidDistance = Vector2.Distance(eyeOuterUpperLid, eyeOuterLowerLid);
-        var eyeMidLidDistance = Vector2.Distance(eyeMidUpperLid, eyeMidLowerLid);
-        var eyeInnerLidDistance = Vector2.Distance(eyeInnerUpperLid, eyeInnerLowerLid);
-        var eyeLidAvg = (eyeOuterLidDistance + eyeMidLidDistance + eyeInnerLidDistance) / 3;
-        var ratio = eyeLidAvg / eyeWidth;
+        float eyeWidth = Vector2.Distance(eyeOuterCorner, eyeInnerCorner);
+        float eyeOuterLidDistance = Vector2.Distance(eyeOuterUpperLid, eyeOuterLowerLid);
+        float eyeMidLidDistance = Vector2.Distance(eyeMidUpperLid, eyeMidLowerLid);
+        float eyeInnerLidDistance = Vector2.Distance(eyeInnerUpperLid, eyeInnerLowerLid);
+        float eyeLidAvg = (eyeOuterLidDistance + eyeMidLidDistance + eyeInnerLidDistance) / 3;
+        float ratio = eyeLidAvg / eyeWidth;
 
         return ratio;
     }
@@ -234,21 +235,21 @@ public static class FaceSolver
     /// </summary>
     public static Vector2 PupilPos(NormalizedLandmarkList list, Side side)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var eyePoints = side == Side.Right ? EyeRightPoints : EyeLeftPoints;
-        var eyeOuterCorner = landmarks[eyePoints[0]].ToVector();
-        var eyeInnerCorner = landmarks[eyePoints[1]].ToVector();
-        var eyeWidth = Vector2.Distance(eyeOuterCorner.ToVector2(), eyeInnerCorner.ToVector2());
-        var midPoint = Vector3.Lerp(eyeOuterCorner, eyeInnerCorner, .5f);
+        int[] eyePoints = side == Side.Right ? EyeRightPoints : EyeLeftPoints;
+        Vector3 eyeOuterCorner = landmarks[eyePoints[0]].ToVector();
+        Vector3 eyeInnerCorner = landmarks[eyePoints[1]].ToVector();
+        float eyeWidth = Vector2.Distance(eyeOuterCorner.ToVector2(), eyeInnerCorner.ToVector2());
+        Vector3 midPoint = Vector3.Lerp(eyeOuterCorner, eyeInnerCorner, .5f);
 
-        var pupilPoints = side == Side.Right ? PupilRightPoints : PupilLeftPoints;
-        var pupil = landmarks[pupilPoints[0]].ToVector();
-        var dx = midPoint.X - pupil.X;
-        var dy = midPoint.Y - pupil.Y - eyeWidth * .075f;
+        int[] pupilPoints = side == Side.Right ? PupilRightPoints : PupilLeftPoints;
+        Vector3 pupil = landmarks[pupilPoints[0]].ToVector();
+        float dx = midPoint.X - pupil.X;
+        float dy = midPoint.Y - pupil.Y - eyeWidth * .075f;
 
-        var ratioX = 4 * dx / (eyeWidth / 2);
-        var ratioY = 4 * dy / (eyeWidth / 4);
+        float ratioX = 4 * dx / (eyeWidth / 2);
+        float ratioY = 4 * dy / (eyeWidth / 4);
 
         return new Vector2(ratioX, ratioY);
     }
@@ -259,12 +260,12 @@ public static class FaceSolver
         eyes.Right = Math.Clamp(eyes.Right, 0, 1);
 
         // Difference between each eye
-        var blinkDiff = MathF.Abs(eyes.Left - eyes.Right);
+        float blinkDiff = MathF.Abs(eyes.Left - eyes.Right);
         // Threshold to which difference is considered a wink
-        var blinkThresh = enableWink ? .8f : 1.2f;
+        float blinkThresh = enableWink ? .8f : 1.2f;
 
-        var isClosing = eyes.Left < .3f && eyes.Right < .3f;
-        var isOpening = eyes.Left > .6f && eyes.Right > .6f;
+        bool isClosing = eyes.Left < .3f && eyes.Right < .3f;
+        bool isOpening = eyes.Left > .6f && eyes.Right > .6f;
 
         // Sets obstructed eye to the opposite eye value
         if (headY > maxRotation)
@@ -281,7 +282,7 @@ public static class FaceSolver
         // Wink of averaged blink values
         if (!(blinkDiff >= blinkThresh && !isClosing && !isOpening))
         {
-            var value = Lerp(eyes.Right, eyes.Left, eyes.Right > eyes.Left ? .95f : .05f);
+            float value = Lerp(eyes.Right, eyes.Left, eyes.Right > eyes.Left ? .95f : .05f);
             eyes.Left = value;
             eyes.Right = value;
         }
@@ -292,7 +293,7 @@ public static class FaceSolver
     /// </summary>
     public static Eyes CalcEyes(NormalizedLandmarkList list, float high = .85f, float low = .55f)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Return early if no iris tracking
         if (landmarks.Count != 478)
@@ -317,7 +318,7 @@ public static class FaceSolver
     /// </summary>
     public static Vector2 CalcPupils(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Pupil (x: [-1, 1], y: [-1, 1])
         if (landmarks.Count != 478)
@@ -326,8 +327,8 @@ public static class FaceSolver
         }
 
         // Track pupils using left eye
-        var pupilLeft = PupilPos(list, Side.Left);
-        var pupilRight = PupilPos(list, Side.Right);
+        Vector2 pupilLeft = PupilPos(list, Side.Left);
+        Vector2 pupilRight = PupilPos(list, Side.Right);
 
         return (pupilLeft + pupilRight) * .5f;
     }
@@ -337,10 +338,10 @@ public static class FaceSolver
     /// </summary>
     public static float GetBrowRaise(NormalizedLandmarkList list, Side side)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var browPoints = side == Side.Right ? BrowRightPoints : BrowLeftPoints;
-        var browDistance = EyeLidRatio(
+        int[] browPoints = side == Side.Right ? BrowRightPoints : BrowLeftPoints;
+        float browDistance = EyeLidRatio(
             landmarks[browPoints[0]],
             landmarks[browPoints[1]],
             landmarks[browPoints[2]],
@@ -351,11 +352,11 @@ public static class FaceSolver
             landmarks[browPoints[7]]
         );
 
-        var maxBrowRatio = 1.15f;
-        var browHigh = .125f;
-        var browLow = .07f;
-        var browRatio = browDistance / maxBrowRatio - 1;
-        var browRaiseRatio = (Math.Clamp(browRatio, browLow, browHigh) - browLow) / (browHigh - browLow);
+        float maxBrowRatio = 1.15f;
+        float browHigh = .125f;
+        float browLow = .07f;
+        float browRatio = browDistance / maxBrowRatio - 1;
+        float browRaiseRatio = (Math.Clamp(browRatio, browLow, browHigh) - browLow) / (browHigh - browLow);
 
         return browRaiseRatio;
     }
@@ -365,13 +366,13 @@ public static class FaceSolver
     /// </summary>
     public static float CalcBrow(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         if (landmarks.Count != 478)
             return 0;
 
-        var leftBrow = GetBrowRaise(list, Side.Left);
-        var rightBrow = GetBrowRaise(list, Side.Right);
+        float leftBrow = GetBrowRaise(list, Side.Left);
+        float rightBrow = GetBrowRaise(list, Side.Right);
 
         return (leftBrow + rightBrow) / 2;
     }

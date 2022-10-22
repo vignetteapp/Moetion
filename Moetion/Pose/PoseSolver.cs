@@ -4,6 +4,7 @@
 
 using System;
 using System.Numerics;
+using Google.Protobuf.Collections;
 using Mediapipe.Net.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.VectorExtensions;
@@ -16,7 +17,7 @@ public static class PoseSolver
     {
         (Arm leftArm, Arm rightArm) = calcArms(list);
         (Hips hips, Vector3 spine) = calcHips(list);
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Detect offscreen and reset values to defaults
         bool rightHandOffscreen = landmarks[15].ToVector().Y > -.1f
@@ -45,7 +46,7 @@ public static class PoseSolver
         if (rightFootOffscreen)
             rightArm.Lower *= 0;
 
-        var pose = new Pose
+        Pose pose = new Pose
         {
             Hips = hips,
             LeftArm = leftArm,
@@ -72,10 +73,10 @@ public static class PoseSolver
 
     private static (Arm, Arm) calcArms(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var rightArm = new Arm();
-        var leftArm = new Arm();
+        Arm rightArm = new Arm();
+        Arm leftArm = new Arm();
 
         rightArm.Upper = landmarks[11].ToVector().FindRotation(landmarks[13].ToVector());
         leftArm.Upper = landmarks[12].ToVector().FindRotation(landmarks[14].ToVector());
@@ -129,7 +130,7 @@ public static class PoseSolver
 
     private static (Hips, Vector3) calcHips(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
         // Find 2D normalized hip and shoulder joint positions / distances
         Vector2 hipLeft2d = landmarks[23].ToVector2();
@@ -142,7 +143,7 @@ public static class PoseSolver
         Vector2 shoulderCenter2d = Vector2.Lerp(shoulderLeft2d, shoulderRight2d, 1);
         float spineLength = Vector2.Distance(hipCenter2d, shoulderCenter2d);
 
-        var hips = new Hips
+        Hips hips = new Hips
         {
             Position = new Vector3
             {
@@ -213,14 +214,14 @@ public static class PoseSolver
     // NOTE: Legs are a WIP on the Kalidokit side.
     private static (Leg, Leg) calcLegs(NormalizedLandmarkList list)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var leftLeg = new Leg
+        Leg leftLeg = new Leg
         {
             Upper = landmarks[24].ToVector().FindRotation(landmarks[26].ToVector()),
             Lower = landmarks[26].ToVector().FindRotation(landmarks[28].ToVector()),
         };
-        var rightLeg = new Leg
+        Leg rightLeg = new Leg
         {
             Upper = landmarks[23].ToVector().FindRotation(landmarks[25].ToVector()),
             Lower = landmarks[25].ToVector().FindRotation(landmarks[27].ToVector()),

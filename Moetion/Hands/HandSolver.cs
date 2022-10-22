@@ -4,6 +4,7 @@
 
 using System;
 using System.Numerics;
+using Google.Protobuf.Collections;
 using Mediapipe.Net.Framework.Protobuf;
 using Moetion.Extensions;
 using static Moetion.Extensions.VectorExtensions;
@@ -14,9 +15,9 @@ public static class HandSolver
 {
     public static Hand Solve(NormalizedLandmarkList list, Side side)
     {
-        var landmarks = list.Landmark;
+        RepeatedField<NormalizedLandmark> landmarks = list.Landmark;
 
-        var hand = new Hand
+        Hand hand = new Hand
         {
             Palm = new[]
             {
@@ -59,8 +60,8 @@ public static class HandSolver
 
     private static void rigFingers(ref Hand hand, Side side)
     {
-        var isRight = side == Side.Right;
-        var sideFactor = isRight ? 1 : -1;
+        bool isRight = side == Side.Right;
+        int sideFactor = isRight ? 1 : -1;
 
         hand.Wrist.X = Math.Clamp(hand.Wrist.X * 2 * sideFactor, -.3f, .3f);
         hand.Wrist.Y = Math.Clamp(hand.Wrist.Y * 2.3f, isRight ? -1.2f : -0.6f, isRight ? .6f : 1.6f);
@@ -69,10 +70,10 @@ public static class HandSolver
         #region Thumb
         {
             #region Proximal
-            var dampener = new Vector3(2.2f, 2.2f, .5f);
-            var startPos = new Vector3(1.2f, 1.1f * sideFactor, .2f * sideFactor);
+            Vector3 dampener = new Vector3(2.2f, 2.2f, .5f);
+            Vector3 startPos = new Vector3(1.2f, 1.1f * sideFactor, .2f * sideFactor);
 
-            var newThumbProximal = new Vector3
+            Vector3 newThumbProximal = new Vector3
             {
                 X = Math.Clamp(
                     startPos.X + hand.Thumb.Proximal.Z * -MathF.PI * dampener.X,
@@ -93,10 +94,10 @@ public static class HandSolver
         }
         {
             #region Intermediate
-            var dampener = new Vector3(0, .7f, .5f);
-            var startPos = new Vector3(-.2f, .1f * sideFactor, .2f * sideFactor);
+            Vector3 dampener = new Vector3(0, .7f, .5f);
+            Vector3 startPos = new Vector3(-.2f, .1f * sideFactor, .2f * sideFactor);
 
-            var newThumbIntermediate = new Vector3
+            Vector3 newThumbIntermediate = new Vector3
             {
                 X = Math.Clamp(startPos.X + hand.Thumb.Intermediate.Z * MathF.PI * dampener.X, -2, 2),
                 Y = Math.Clamp(startPos.Y + hand.Thumb.Intermediate.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
@@ -108,10 +109,10 @@ public static class HandSolver
         }
         {
             #region Distal
-            var dampener = new Vector3(0, 1, .5f);
-            var startPos = new Vector3(-.2f, .1f * sideFactor, .2f * sideFactor);
+            Vector3 dampener = new Vector3(0, 1, .5f);
+            Vector3 startPos = new Vector3(-.2f, .1f * sideFactor, .2f * sideFactor);
 
-            var newThumbDistal = new Vector3
+            Vector3 newThumbDistal = new Vector3
             {
                 X = Math.Clamp(startPos.X + hand.Thumb.Distal.Z * MathF.PI * dampener.X, -2, 2),
                 Y = Math.Clamp(startPos.Y + hand.Thumb.Distal.Z * MathF.PI * dampener.Y * sideFactor, -2, 2),
@@ -139,8 +140,8 @@ public static class HandSolver
 
     private static void rigOtherFingerSegment(ref Vector3 segment, Side side)
     {
-        var isRight = side == Side.Right;
-        var sideFactor = isRight ? 1 : -1;
+        bool isRight = side == Side.Right;
+        int sideFactor = isRight ? 1 : -1;
 
         segment.Z = Math.Clamp(
             segment.Z * -MathF.PI * sideFactor,
