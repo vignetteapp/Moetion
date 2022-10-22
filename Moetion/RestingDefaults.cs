@@ -82,13 +82,13 @@ public static class RestingDefaults
                 X = 0,
                 Y = 0,
                 Z = 1.25f,
-            }, //Y = 0 > -.5 // Z = -.5>.5
+            }, // Y = 0 > -.5 // Z = -.5>.5
             Lower = new Vector3
             {
                 X = 0,
                 Y = 0,
                 Z = 0,
-            }, //X = 0 > -4, Z = 0 to -.9
+            }, // X = 0 > -4, Z = 0 to -.9
             Hand = new Vector3
             {
                 X = 0,

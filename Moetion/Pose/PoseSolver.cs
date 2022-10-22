@@ -161,7 +161,7 @@ public static class PoseSolver
 
         hips.Rotation.Y += .5f;
 
-        //Stop jumping between left and right shoulder tilt
+        // Stop jumping between left and right shoulder tilt
         if (hips.Rotation.Z > 0)
             hips.Rotation.Z = 1 - hips.Rotation.Z;
 
@@ -174,7 +174,7 @@ public static class PoseSolver
 
         Vector3 spine = RollPitchYaw(landmarks[11].ToVector(), landmarks[12].ToVector());
 
-        //fix -PI, PI jumping
+        // fix -PI, PI jumping
         if (spine.Y > .5f)
             spine.Y -= 2;
 
